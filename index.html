@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="gl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tutorial RØDECaster Pro II · Taller de podcast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#121315;--panel:#1b1d20;--panel2:#23262a;--line:#33373d;--txt:#ececea;--mut:#9aa0a6;--red:#ff3b3b;--green:#33d17a;--amber:#ffb020;--blue:#3d8bff;--accent:#ff3b3b;--r:14px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;line-height:1.5}
+body.gl .es, body.es .gl{display:none!important}
+a{color:#ff8c8c}
+header{padding:20px 16px 10px;max-width:900px;margin:0 auto;position:relative}
+header .kick{font:700 12px/1 "JetBrains Mono",monospace;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+header h1{margin:6px 0 4px;font-size:clamp(24px,6vw,36px);font-weight:800;letter-spacing:-.02em;padding-right:60px}
+header p{margin:0;color:var(--mut);font-size:15px}
+.lang{position:absolute;top:18px;right:16px;z-index:20}
+.lang button.cur{background:none;border:1px solid var(--line);border-radius:10px;padding:4px;cursor:pointer;display:flex}
+.lang .menu{position:absolute;right:0;top:44px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:4px;display:none;flex-direction:column;gap:4px}
+.lang.open .menu{display:flex}
+.lang .menu button{background:none;border:0;padding:4px;cursor:pointer;border-radius:8px;display:flex}
+.lang .menu button:hover{background:var(--panel2)}
+.flag{width:36px;height:24px;border-radius:4px;display:block;box-shadow:0 0 0 1px #0006}
+.prog{display:flex;align-items:center;gap:10px;margin-top:14px;font:600 13px "JetBrains Mono",monospace;color:var(--mut)}
+.bar{flex:1;height:8px;background:var(--panel2);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--amber));transition:width .4s}
+nav{position:sticky;top:0;z-index:5;background:rgba(18,19,21,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .in{max-width:900px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 16px;scrollbar-width:none}
+nav .in::-webkit-scrollbar{display:none}
+nav button{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--txt);border-radius:99px;padding:7px 13px;font:600 13px Inter;cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+nav button .ok{color:var(--green);margin-left:4px}
+nav button.on .ok{color:#fff}
+main{max-width:900px;margin:0 auto;padding:18px 16px 60px}
+section{display:none}
+section.on{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+h2{font-size:26px;margin:4px 0 6px;letter-spacing:-.01em}
+h2 small{display:block;font:700 12px "JetBrains Mono",monospace;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+h3{font-size:17px;margin:22px 0 8px}
+.lead{color:var(--mut);margin-top:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:14px 0}
+.note{border-left:4px solid var(--amber);background:#2a2416;border-radius:10px;padding:10px 14px;margin:14px 0;font-size:15px}
+.note.red{border-color:var(--red);background:#2a1717}
+.note.blue{border-color:var(--blue);background:#16202e}
+ol.steps{list-style:none;padding:0;margin:10px 0;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding:11px 12px 11px 50px;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:8px 0;cursor:pointer;transition:.2s}
+ol.steps li::before{content:counter(s);position:absolute;left:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--panel2);display:grid;place-items:center;font:700 13px "JetBrains Mono",monospace}
+ol.steps li.done{opacity:.55;border-color:#24492f}
+ol.steps li.done::before{content:"✓";background:var(--green);color:#071}
+ul{padding-left:20px}
+li{margin:4px 0}
+.prueba{background:linear-gradient(135deg,#2a1717,#1b1d20);border:1px solid #5a2a2a;border-radius:var(--r);padding:16px;margin:22px 0 8px}
+.prueba b.t{font:700 12px "JetBrains Mono",monospace;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+.prueba p{margin:6px 0 12px}
+.btn{border-radius:10px;padding:10px 16px;font:700 14px Inter;cursor:pointer;background:var(--panel2);color:var(--txt);border:1px solid var(--line)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.done{background:var(--green);border-color:var(--green);color:#062b14}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:30px}
+.seg{display:inline-flex;background:var(--panel2);border-radius:10px;padding:3px;border:1px solid var(--line)}
+.seg button{border:0;background:none;color:var(--mut);padding:7px 14px;border-radius:8px;font:600 14px Inter;cursor:pointer}
+.seg button.on{background:var(--accent);color:#fff}
+.parts{display:grid;gap:8px}
+.part{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;text-align:left;color:var(--txt);font:inherit;width:100%}
+.part .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:800 14px Inter}
+.part b{display:block}
+.part .d{display:none;color:var(--mut);font-size:14px;margin-top:4px}
+.part.open{border-color:var(--accent)}
+.part.open .d{display:block}
+#diag svg{display:block}
+#diag .pt,#diag .bd{cursor:pointer}
+#diag .pt.hl{filter:drop-shadow(0 0 4px #ff3b3b) drop-shadow(0 0 8px #ff3b3b)}
+#diag .bd circle{fill:#c9a86a;stroke:#fff;stroke-width:2}
+#diag .bd text{fill:#fff;font:800 13px Inter;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+#diag .bd.hl circle{fill:var(--accent)}
+#diag .ld{stroke:#c9a86a;stroke-width:2}
+#diag .ld.hl{stroke:var(--accent)}
+#diag text.lb{fill:#bbb;font:700 10px Inter;text-anchor:middle}
+#pinfo b{color:var(--accent)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.meters{display:flex;gap:18px;justify-content:center;align-items:flex-end}
+.meter{width:34px;height:220px;background:#0c0d0e;border-radius:8px;position:relative;overflow:hidden;border:1px solid var(--line)}
+.meter i{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(0deg,var(--green) 0%,var(--green) 70%,var(--amber) 82%,var(--red) 95%);background-size:100% 220px;background-position:bottom;transition:height .08s}
+.meter .pk{position:absolute;left:0;right:0;height:2px;background:#fff}
+.meter .zone{position:absolute;left:0;right:0;border-top:1px dashed #fff8;border-bottom:1px dashed #fff8;background:#ffffff10}
+.mlab{text-align:center;font:600 12px "JetBrains Mono",monospace;color:var(--mut);margin-top:6px}
+.fader{writing-mode:vertical-lr;direction:rtl;height:220px;width:34px;accent-color:var(--accent)}
+.fwrap{position:relative;height:220px}
+.unity{position:absolute;left:-8px;right:-8px;height:3px;background:#fff;border-radius:2px;pointer-events:none}
+input[type=range].h{width:100%;accent-color:var(--accent)}
+.read{font:700 22px "JetBrains Mono",monospace;text-align:center;margin-top:8px}
+.fb{text-align:center;font-weight:700;padding:8px;border-radius:10px;margin-top:8px}
+.recbtn{width:130px;height:130px;border-radius:50%;border:6px solid #000;font:800 22px Inter;color:#fff;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation;transition:background .2s, box-shadow .2s}
+.recwrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px}
+.timer{font:700 30px "JetBrains Mono",monospace}
+.legend{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;font-size:14px}
+.dot{width:16px;height:16px;border-radius:50%}
+.mon{width:110px;height:110px;border-radius:50%;display:grid;place-items:center;border:8px solid var(--green);margin:auto;position:relative;transition:.2s;background:var(--panel2)}
+.mon svg{width:46px;height:46px}
+.mon.x::after{content:"✕";position:absolute;color:var(--red);font:900 54px Inter}
+.dial{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#555,#1a1a1a);border:3px solid #444;cursor:pointer;margin:auto;user-select:none;-webkit-user-select:none;touch-action:manipulation;display:grid;place-items:center;color:#aaa;font:600 11px Inter;text-align:center}
+.tog{display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer}
+.tog .sw{width:46px;height:26px;border-radius:99px;background:var(--panel2);border:1px solid var(--line);position:relative;transition:.2s;flex:none}
+.tog .sw::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#888;transition:.2s}
+.tog.on .sw{background:var(--accent)}
+.tog.on .sw::after{left:22px;background:#fff}
+.pads{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:420px;margin:auto}
+.pad{aspect-ratio:1;border-radius:12px;border:2px solid var(--line);background:var(--panel2);color:var(--txt);font:700 12px Inter;cursor:pointer;padding:6px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:4px;transition:.15s}
+.pad .ic{font-size:20px}
+.pad.hit{transform:scale(.94);filter:brightness(1.6)}
+.banks{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:12px;font:700 14px "JetBrains Mono",monospace}
+.tree{font:500 14px "JetBrains Mono",monospace;background:#0c0d0e;border:1px solid var(--line);border-radius:12px;padding:12px}
+.tree div{padding:3px 0;cursor:pointer}
+.tree .ind{padding-left:20px}
+.tree .f{color:#ffd27a}
+.tree .w{color:#9fd8ff;cursor:default}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin:8px 0;padding:0 14px}
+details summary{padding:12px 0;font-weight:700;cursor:pointer;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"＋";color:var(--accent);margin-right:8px}
+details[open] summary::before{content:"－"}
+details>div{padding-bottom:12px}
+.chk label{display:flex;gap:10px;align-items:flex-start;padding:9px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.chk input{width:20px;height:20px;accent-color:var(--green);flex:none;margin-top:2px}
+.chk label:has(input:checked) span{color:var(--mut);text-decoration:line-through}
+.q{margin:14px 0}
+.q .opts{display:grid;gap:6px;margin-top:6px}
+.q .opts button{text-align:left;background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px 12px;font:500 14px Inter;cursor:pointer}
+.q .opts button.ok{background:#173b25;border-color:var(--green)}
+.q .opts button.ko{background:#3b1717;border-color:var(--red)}
+.q .ex{font-size:14px;color:var(--mut);margin-top:6px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;text-align:left;color:var(--txt);font:inherit}
+.tile b{display:block;font-size:16px}
+.tile span{color:var(--mut);font-size:13px}
+.tile .tk{float:right;color:var(--green);font-weight:800}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+.kbd{font:700 12px "JetBrains Mono",monospace;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;white-space:nowrap}
+footer{max-width:900px;margin:0 auto;padding:0 16px 40px;color:var(--mut);font-size:13px}
+.mt .mtic{font-size:30px}
+.mt ul{margin:6px 0 0;padding-left:18px;font-size:15px}
+.polars{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:560px){.polars{grid-template-columns:1fr}}
+.pol{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;margin:0}
+.pol svg{width:90px;height:90px}
+.pol span{color:var(--mut);font-size:14px}
+.dsim{display:flex;align-items:center;gap:6px;margin:14px 0 6px;font-size:34px}
+.dline{flex:1;height:4px;position:relative}
+.dline div{position:absolute;right:0;top:0;height:4px;background:repeating-linear-gradient(90deg,#666 0 6px,transparent 6px 10px);transition:width .15s}
+.dbars{display:grid;gap:6px;margin-top:8px;font-size:14px}
+.dbar{height:12px;background:var(--panel2);border-radius:99px;overflow:hidden;margin-top:2px}
+.dbar i{display:block;height:100%;transition:width .15s}
+.tips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:640px){.tips{grid-template-columns:1fr}}
+.tip{display:flex;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:15px}
+.tip>b{font-size:22px;line-height:1.2}
+.q3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:600px){.q3{grid-template-columns:1fr}}
+.q3 .card{margin:0}
+.q3 .big{font-size:28px}
+.q3 span{display:block;color:var(--mut);font-size:14px}
+.fmts{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.fmt{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--txt);font:600 14px Inter;cursor:pointer;text-align:center}
+.fmt .ic{display:block;font-size:26px}
+.fmt.on{border-color:var(--accent);background:#2a1717}
+#fmtInfo b{color:var(--accent)}
+.idea{font-size:18px;font-weight:700;min-height:54px;margin-bottom:12px}
+.form label{display:block;margin:8px 0}
+.form label span.l{display:block;font-size:13px;color:var(--mut);font-weight:600;margin-bottom:3px}
+.form input,.form select,#escTarget,.erow input{width:100%;background:#0c0d0e;color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:15px Inter}
+.erow{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--accent);border-radius:12px;padding:10px;margin:8px 0;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:start}
+.erow .ic{font-size:24px;width:30px;text-align:center}
+.erow .f{display:grid;grid-template-columns:2fr 1fr;gap:6px}
+.erow .f input{padding:6px 8px;font-size:14px}
+.erow .f .dur{font-family:"JetBrains Mono",monospace}
+.erow .acts{display:flex;flex-direction:column;gap:4px}
+.erow .acts button{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:6px;width:30px;height:26px;cursor:pointer}
+.erow .st{font-size:12px;color:var(--mut);font-family:"JetBrains Mono",monospace;grid-column:2}
+.addrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.addrow button{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:99px;padding:6px 10px;font:600 13px Inter;cursor:pointer}
+.live{position:fixed;inset:0;background:#0b0b0c;z-index:50;display:none;flex-direction:column;padding:16px;gap:12px}
+.live.on{display:flex}
+.lhead{display:flex;justify-content:space-between;align-items:center;font:700 18px "JetBrains Mono",monospace;color:var(--mut)}
+.lnow{flex:1;background:var(--panel);border:3px solid var(--accent);border-radius:18px;padding:18px;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.lnow small,.lnext small{font:700 12px "JetBrains Mono",monospace;letter-spacing:.15em;color:var(--accent)}
+#lNow{font-size:clamp(24px,7vw,48px);font-weight:800}
+.ltime{font:700 clamp(48px,16vw,110px) "JetBrains Mono",monospace}
+.ltime.warn{color:var(--amber)} .ltime.over{color:var(--red)}
+#lTech{color:var(--amber);font-size:18px;font-weight:700}
+.lnext{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center;font-size:18px}
+.lbtns{display:grid;grid-template-columns:1fr 2fr 2fr;gap:10px}
+.lbtns .btn{padding:16px;font-size:18px}
+td:first-child{white-space:nowrap}
+nav .in.sub{padding-top:0}
+nav .in.sub:empty{display:none}
+nav .in.sub button{font-size:12px;padding:5px 11px;background:transparent}
+nav .in.sub button.on{background:var(--panel2);border-color:var(--accent);color:var(--txt)}
+.tgroup{margin:18px 0 8px;font:700 12px "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.anat{display:flex;height:64px;border-radius:12px;overflow:hidden;gap:3px;margin:10px 0}
+.anat div{display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:18px;color:#111;font-weight:700;min-width:0;text-align:center}
+.anat div span{font-size:11px;line-height:1.1;padding:0 2px;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.proc{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+.proc button{flex:1 0 96px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 6px;color:var(--txt);font:600 13px Inter;cursor:pointer;position:relative;text-align:center}
+.proc button .ic{display:block;font-size:24px}
+.proc button small{display:block;color:var(--mut);font-weight:500;font-size:11px;margin-top:2px}
+.proc button:not(:last-child)::after{content:"›";position:absolute;right:-9px;top:50%;transform:translateY(-50%);color:var(--accent);font-size:20px;z-index:1}
+.tl{position:relative;height:58px;border-radius:10px;overflow:hidden;background:var(--panel2)}
+.tl .sg{position:absolute;top:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font:700 11px Inter;color:#111;border-right:2px solid var(--bg);overflow:hidden;white-space:nowrap;cursor:pointer;line-height:1.15;padding:0 2px}
+.tl .sg span{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.tl .sg.cur{box-shadow:inset 0 0 0 3px #fff}
+.tl .sg.past{opacity:.35}
+.tl .tg{position:absolute;top:0;bottom:0;border-left:2px dashed #fff;pointer-events:none}
+.tl .cr{position:absolute;top:0;bottom:0;width:3px;margin-left:-1px;background:#fff;box-shadow:0 0 8px #fff;pointer-events:none}
+.tls{position:relative;height:18px;font:600 10px "JetBrains Mono",monospace;color:var(--mut);margin-top:3px}
+.tls span{position:absolute;transform:translateX(-50%)}
+.tls span:first-child{transform:none}
+.tlleg{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:8px;font-size:12px;color:var(--mut)}
+.tlleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.erow.flash{animation:fl 1s}
+@keyframes fl{0%,60%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:none}}
+#lTL{height:40px;flex:none}
+</style>
+</head>
+<body class="gl">
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="f-gl" viewBox="0 0 36 24"><rect width="36" height="24" fill="#fff"/><path d="M0 0 L5 0 L36 20 L36 24 L31 24 L0 4Z" fill="#0b8fd6"/></symbol>
+    <symbol id="f-es" viewBox="0 0 36 24"><rect width="36" height="24" fill="#c60b1e"/><rect y="6" width="36" height="12" fill="#ffc400"/></symbol>
+  </defs>
+</svg>
+<header>
+  <div class="lang" id="lang">
+    <button class="cur" id="langCur" aria-label="Idioma"><svg class="flag"><use href="#f-gl"/></svg></button>
+    <div class="menu" id="langMenu"></div>
+  </div>
+  <div class="kick">Formación · RØDECaster Pro II</div>
+  <h1><span class="gl">Obradoiro de podcast</span><span class="es">Taller de podcast</span></h1>
+  <p><span class="gl"><b>1</b> Podcast · <b>2</b> Escaleta · <b>3</b> Contidos · <b>4</b> A mesa. Gravamos en <b>tarxeta microSD</b>, sen ordenador.</span><span class="es"><b>1</b> Podcast · <b>2</b> Escaleta · <b>3</b> Contenidos · <b>4</b> La mesa. Grabamos en <b>tarjeta microSD</b>, sin ordenador.</span></p>
+  <div class="prog"><div class="bar"><i id="pbar"></i></div><span id="ptxt"></span></div>
+</header>
+<nav><div class="in" id="nav"></div><div class="in sub" id="subnav"></div></nav>
+<main id="main">
+
+<!-- INICIO -->
+<section id="inicio" data-gl="Inicio" data-es="Inicio">
+  <h2><small><span class="gl">Comeza aquí</span><span class="es">Empieza aquí</span></small><span class="gl">Que imos aprender</span><span class="es">Qué vamos a aprender</span></h2>
+  <p class="lead"><span class="gl">Cada bloque remata cunha <b>proba</b> para facer coa mesa diante. Marcade as que fagades e veredes o progreso arriba.</span><span class="es">Cada bloque termina con una <b>prueba</b> para hacer con la mesa delante. Marcad las que hagáis y veréis el progreso arriba.</span></p>
+  <div id="tiles"></div>
+  <h3><span class="gl">Material necesario</span><span class="es">Material necesario</span></h3>
+  <ol class="steps tick" data-k="mat">
+    <li><span class="gl">RØDECaster Pro II coa súa fonte de alimentación (USB-C).</span><span class="es">RØDECaster Pro II con su fuente de alimentación (USB-C).</span></li>
+    <li><span class="gl">Tarxeta <b>microSD de marca e rápida</b>: RØDE recomenda polo menos 100 MB/s. As baratas sen marca poden cortar a gravación.</span><span class="es">Tarjeta <b>microSD de marca y rápida</b>: RØDE recomienda al menos 100 MB/s. Las baratas sin marca pueden cortar la grabación.</span></li>
+    <li><span class="gl">Micrófonos con cable <b>XLR</b> (ata 4).</span><span class="es">Micrófonos con cable <b>XLR</b> (hasta 4).</span></li>
+    <li><span class="gl">Cascos con <b>jack grande (6,3 mm)</b> ou un adaptador se son de jack pequeno (3,5 mm).</span><span class="es">Cascos con <b>jack grande (6,3 mm)</b> o un adaptador si son de jack pequeño (3,5 mm).</span></li>
+    <li><span class="gl">Para altofalantes: 2 cables <b>TRS balanceados de 6,3 mm</b> (L e R).</span><span class="es">Para altavoces: 2 cables <b>TRS balanceados de 6,3 mm</b> (L y R).</span></li>
+    <li><span class="gl">Opcional: un lector de microSD para o ordenador.</span><span class="es">Opcional: un lector de microSD para el ordenador.</span></li>
+  </ol>
+  <div class="note blue"><span class="gl">Os menús da mesa poden poñerse en castelán. Aquí verás entre «comiñas» o nome en inglés do manual, por se a pantalla está en inglés.</span><span class="es">Los menús de la mesa pueden ponerse en castellano. Aquí verás entre «comillas» el nombre en inglés del manual, por si la pantalla está en inglés.</span></div>
+</section>
+
+<!-- PODCAST -->
+<section id="podcast" data-gl="Que é un podcast" data-es="Qué es un podcast">
+  <h2><small><span class="gl">Bloque 1</span><span class="es">Bloque 1</span></small><span class="gl">Que é un podcast?</span><span class="es">¿Qué es un podcast?</span></h2>
+  <p class="lead"><span class="gl">Un <b>programa de audio</b> (ás veces tamén vídeo) que se publica <b>por episodios</b> e que se escoita <b>cando e onde queiras</b>.</span><span class="es">Un <b>programa de audio</b> (a veces también vídeo) que se publica <b>por episodios</b> y que se escucha <b>cuando y donde quieras</b>.</span></p>
+
+  <div class="grid2">
+    <div class="card"><b>📻 <span class="gl">Radio</span><span class="es">Radio</span></b><ul>
+      <li><span class="gl">En directo, cun horario.</span><span class="es">En directo, con un horario.</span></li>
+      <li><span class="gl">Se non a escoitas nese momento, pérdela.</span><span class="es">Si no la escuchas en ese momento, te la pierdes.</span></li>
+      <li><span class="gl">Emisora, licenzas, programación.</span><span class="es">Emisora, licencias, programación.</span></li></ul></div>
+    <div class="card"><b>🎧 <span class="gl">Podcast</span><span class="es">Podcast</span></b><ul>
+      <li><span class="gl"><b>A demanda</b>: escóitalo cando queiras.</span><span class="es"><b>A demanda</b>: lo escuchas cuando quieras.</span></li>
+      <li><span class="gl">Por episodios; podes subscribirte.</span><span class="es">Por episodios; puedes suscribirte.</span></li>
+      <li><span class="gl">Calquera pode facer un: abonda un micro e unha idea.</span><span class="es">Cualquiera puede hacer uno: basta un micro y una idea.</span></li></ul></div>
+  </div>
+  <div class="note blue"><span class="gl"><b>De onde vén o nome?</b> De <i>iPod</i> + <i>broadcast</i> (emisión), arredor de 2004. Hoxe escóitanse en Spotify, Apple Podcasts, iVoox, YouTube…</span><span class="es"><b>¿De dónde viene el nombre?</b> De <i>iPod</i> + <i>broadcast</i> (emisión), hacia 2004. Hoy se escuchan en Spotify, Apple Podcasts, iVoox, YouTube…</span></div>
+
+  <h3><span class="gl">Que ten un bo podcast?</span><span class="es">¿Qué tiene un buen podcast?</span></h3>
+  <div class="tips">
+    <div class="tip"><b>🎯</b><span><span class="gl"><b>Un tema claro</b> e un público concreto.</span><span class="es"><b>Un tema claro</b> y un público concreto.</span></span></div>
+    <div class="tip"><b>🗣️</b><span><span class="gl"><b>Voces con personalidade</b>: naturais, non lendo.</span><span class="es"><b>Voces con personalidad</b>: naturales, no leyendo.</span></span></div>
+    <div class="tip"><b>🧱</b><span><span class="gl"><b>Estrutura que se repite</b>: o oínte sabe que vai pasar.</span><span class="es"><b>Estructura que se repite</b>: el oyente sabe qué va a pasar.</span></span></div>
+    <div class="tip"><b>🔊</b><span><span class="gl"><b>Son limpo</b>: mellor bo son que moitos efectos.</span><span class="es"><b>Sonido limpio</b>: mejor buen sonido que muchos efectos.</span></span></div>
+  </div>
+
+  <h3><span class="gl">As partes dun episodio</span><span class="es">Las partes de un episodio</span></h3>
+  <div class="anat">
+    <div style="flex:1;background:#a46bff">🎵<span><span class="gl">Sintonía</span><span class="es">Sintonía</span></span></div>
+    <div style="flex:2;background:#33d17a">👋<span><span class="gl">Presentación</span><span class="es">Presentación</span></span></div>
+    <div style="flex:6;background:#3d8bff">🗂️<span><span class="gl">Contido (seccións)</span><span class="es">Contenido (secciones)</span></span></div>
+    <div style="flex:2;background:#ff9a3a">🙋<span><span class="gl">Peche</span><span class="es">Cierre</span></span></div>
+    <div style="flex:1;background:#a46bff">🎵</div>
+  </div>
+  <p style="color:var(--mut);font-size:14px"><span class="gl">Esta estrutura é a que logo planificaremos na <b>escaleta</b>.</span><span class="es">Esta estructura es la que luego planificaremos en la <b>escaleta</b>.</span></p>
+
+  <h3><span class="gl">Como o imos facer: o proceso</span><span class="es">Cómo lo vamos a hacer: el proceso</span></h3>
+  <div class="proc" id="proc"></div>
+
+  <div class="prueba" data-p="10"><b class="t"><span class="gl">Proba <span class="pn"></span> · Escoitar</span><span class="es">Prueba <span class="pn"></span> · Escuchar</span></b><p><span class="gl">Escoitade 3 minutos dun podcast e identificade as partes: sintonía, presentación, seccións, peche. Quen fala? Que sons hai?</span><span class="es">Escuchad 3 minutos de un podcast e identificad las partes: sintonía, presentación, secciones, cierre. ¿Quién habla? ¿Qué sonidos hay?</span></p></div>
+</section>
+
+<!-- ESCALETA -->
+<section id="escaleta" data-gl="Escaleta" data-es="Escaleta">
+  <h2><small><span class="gl">Bloque 2</span><span class="es">Bloque 2</span></small><span class="gl">A escaleta</span><span class="es">La escaleta</span></h2>
+  <p class="lead"><span class="gl">É o <b>mapa do programa</b>: que pasa, en que orde, quen fala, canto dura e que se toca na mesa.</span><span class="es">Es el <b>mapa del programa</b>: qué pasa, en qué orden, quién habla, cuánto dura y qué se toca en la mesa.</span></p>
+  <div class="grid2">
+    <div class="card"><b>📝 <span class="gl">Guion</span><span class="es">Guion</span></b><br><span class="gl">O que se <b>di</b>: textos, preguntas.</span><span class="es">Lo que se <b>dice</b>: textos, preguntas.</span></div>
+    <div class="card"><b>🗺️ <span class="gl">Escaleta</span><span class="es">Escaleta</span></b><br><span class="gl">O que <b>pasa e cando</b>: bloques, tempos, sons, quen.</span><span class="es">Lo que <b>pasa y cuándo</b>: bloques, tiempos, sonidos, quién.</span></div>
+  </div>
+
+  <h3><span class="gl">Constrúe a túa escaleta</span><span class="es">Construye tu escaleta</span></h3>
+  <div class="row" style="margin-bottom:8px">
+    <span style="color:var(--mut);font-size:14px"><span class="gl">Modelos:</span><span class="es">Modelos:</span></span>
+    <button class="btn" data-tpl="mag">📻 Magazine 10'</button>
+    <button class="btn" data-tpl="ent">🎙️ <span class="gl">Entrevista</span><span class="es">Entrevista</span> 8'</button>
+    <button class="btn" data-tpl="clr">🗑️ <span class="gl">Baleirar</span><span class="es">Vaciar</span></button>
+  </div>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <label style="font-weight:600"><span class="gl">Duración obxectivo</span><span class="es">Duración objetivo</span>: <input type="number" id="escTarget" min="1" max="60" value="10" style="width:60px"> min</label>
+      <b id="escTotal" style="font-family:'JetBrains Mono',monospace"></b>
+    </div>
+    <div class="bar" style="margin:10px 0"><i id="escBar"></i></div>
+    <div class="fb" id="escFb" style="background:var(--panel2)"></div>
+  </div>
+  <h3><span class="gl">Liña de tempo</span><span class="es">Línea de tiempo</span></h3>
+  <p class="lead" style="font-size:14px"><span class="gl">Cada cor é un tipo de bloque e o ancho, o que dura. Toca un bloque para editalo. A liña branca discontinua é a duración obxectivo.</span><span class="es">Cada color es un tipo de bloque y el ancho, lo que dura. Toca un bloque para editarlo. La línea blanca discontinua es la duración objetivo.</span></p>
+  <div class="card"><div class="tl" id="escTL"></div><div class="tls" id="escTLs"></div><div class="tlleg" id="escLeg"></div></div>
+  <h3><span class="gl">Bloques</span><span class="es">Bloques</span></h3>
+  <div id="escRows"></div>
+  <div class="card">
+    <b><span class="gl">＋ Engadir bloque</span><span class="es">＋ Añadir bloque</span></b>
+    <div class="addrow" id="escAdd"></div>
+  </div>
+  <div class="row">
+    <button class="btn pri" id="escLive">🔴 <span class="gl">Modo emisión</span><span class="es">Modo emisión</span></button>
+    <button class="btn" id="escCopy">📋 <span class="gl">Copiar como texto</span><span class="es">Copiar como texto</span></button>
+    <span id="escMsg" style="color:var(--mut);font-size:14px"></span>
+  </div>
+  <textarea id="escTxt" style="display:none;width:100%;height:160px;margin-top:10px;background:#0c0d0e;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:10px;font:13px 'JetBrains Mono',monospace"></textarea>
+  <div class="note blue"><span class="gl"><b>Modo emisión:</b> ábreo na tableta ou no proxector mentres gravades. Marca o bloque actual, o seguinte e o tempo que queda. Preme «Seguinte» ao cambiar de bloque.</span><span class="es"><b>Modo emisión:</b> ábrelo en la tableta o en el proyector mientras grabáis. Marca el bloque actual, el siguiente y el tiempo que queda. Pulsa «Siguiente» al cambiar de bloque.</span></div>
+
+  <h3><span class="gl">Consellos</span><span class="es">Consejos</span></h3>
+  <ul>
+    <li><span class="gl">Empeza e remata con <b>sintonía</b>: dá identidade.</span><span class="es">Empieza y termina con <b>sintonía</b>: da identidad.</span></li>
+    <li><span class="gl">Separa seccións cunha <b>ráfaga</b> curta (un pad).</span><span class="es">Separa secciones con una <b>ráfaga</b> corta (un pad).</span></li>
+    <li><span class="gl">Na columna <b>Mesa</b> apunta que se toca: «Pad 1», «Fader 2 arriba», «Mute 3».</span><span class="es">En la columna <b>Mesa</b> apunta qué se toca: «Pad 1», «Fader 2 arriba», «Mute 3».</span></li>
+    <li><span class="gl">Deixa un <b>colchón</b>: un bloque que se poida alongar ou cortar segundo vaia o tempo.</span><span class="es">Deja un <b>colchón</b>: un bloque que se pueda alargar o cortar según vaya el tiempo.</span></li>
+  </ul>
+
+  <div class="prueba" data-p="9"><b class="t"><span class="gl">Proba <span class="pn"></span> · Gravar coa escaleta</span><span class="es">Prueba <span class="pn"></span> · Grabar con la escaleta</span></b><p><span class="gl">Cada grupo fai a escaleta dun episodio de 5-10 minutos. Cando dominedes a mesa (bloque 4), gravádeo seguíndoa en modo emisión.</span><span class="es">Cada grupo hace la escaleta de un episodio de 5-10 minutos. Cuando dominéis la mesa (bloque 4), grabadlo siguiéndola en modo emisión.</span></p></div>
+</section>
+
+<div class="live" id="live">
+  <div class="lhead"><span id="lClock">00:00</span><span id="lLeft"></span><button class="btn" id="lClose">✕</button></div>
+  <div class="lnow"><small><span class="gl">AGORA</span><span class="es">AHORA</span></small><div id="lNow"></div><div class="ltime" id="lTime"></div><div id="lTech"></div></div>
+  <div class="tl" id="lTL"></div>
+  <div class="lnext"><small><span class="gl">DESPOIS</span><span class="es">DESPUÉS</span></small><div id="lNext"></div></div>
+  <div class="lbtns"><button class="btn" id="lPrev">◀</button><button class="btn pri" id="lPlay"></button><button class="btn" id="lNextB"></button></div>
+</div>
+
+<!-- CONTIDO -->
+<section id="contido" data-gl="Contidos" data-es="Contenidos">
+  <h2><small><span class="gl">Bloque 3</span><span class="es">Bloque 3</span></small><span class="gl">O contido: de que vai o noso podcast?</span><span class="es">El contenido: ¿de qué va nuestro podcast?</span></h2>
+  <p class="lead"><span class="gl">Antes de gravar hai que saber que imos contar, a quen e como. Tres preguntas:</span><span class="es">Antes de grabar hay que saber qué vamos a contar, a quién y cómo. Tres preguntas:</span></p>
+  <div class="q3">
+    <div class="card"><div class="big">👥</div><b><span class="gl">Para quen?</span><span class="es">¿Para quién?</span></b><span><span class="gl">Compañeiros, familias, o barrio… Cambia o ton e as palabras.</span><span class="es">Compañeros, familias, el barrio… Cambia el tono y las palabras.</span></span></div>
+    <div class="card"><div class="big">💡</div><b><span class="gl">De que?</span><span class="es">¿De qué?</span></b><span><span class="gl">O tema <b>nunha soa frase</b>. Se non cabe, é demasiado grande.</span><span class="es">El tema <b>en una sola frase</b>. Si no cabe, es demasiado grande.</span></span></div>
+    <div class="card"><div class="big">🎛️</div><b><span class="gl">Como?</span><span class="es">¿Cómo?</span></b><span><span class="gl">Formato e duración. Mellor curto e ben feito: 5-10 minutos.</span><span class="es">Formato y duración. Mejor corto y bien hecho: 5-10 minutos.</span></span></div>
+  </div>
+
+  <h3><span class="gl">Formatos (toca para ver)</span><span class="es">Formatos (toca para ver)</span></h3>
+  <div class="fmts" id="fmts"></div>
+  <div class="card" id="fmtInfo"></div>
+
+  <h3><span class="gl">Escribir para o oído</span><span class="es">Escribir para el oído</span></h3>
+  <p class="lead"><span class="gl">Na radio non se pode volver atrás a ler. Por iso:</span><span class="es">En la radio no se puede volver atrás a leer. Por eso:</span></p>
+  <div class="tips">
+    <div class="tip"><b>✂️</b><span><span class="gl"><b>Frases curtas.</b> Unha idea por frase.</span><span class="es"><b>Frases cortas.</b> Una idea por frase.</span></span></div>
+    <div class="tip"><b>🗣️</b><span><span class="gl"><b>Fala a unha persoa</b>, non a «os oíntes»: «Sabías que…?»</span><span class="es"><b>Habla a una persona</b>, no a «los oyentes»: «¿Sabías que…?»</span></span></div>
+    <div class="tip"><b>🔁</b><span><span class="gl"><b>Repite o importante</b> e di quen fala: «Seguimos con Uxía…»</span><span class="es"><b>Repite lo importante</b> y di quién habla: «Seguimos con Uxía…»</span></span></div>
+    <div class="tip"><b>🔢</b><span><span class="gl"><b>Números redondos</b>: «case tres mil», mellor que «2.947».</span><span class="es"><b>Números redondos</b>: «casi tres mil», mejor que «2.947».</span></span></div>
+    <div class="tip"><b>📝</b><span><span class="gl"><b>Guion ou puntos clave.</b> Lido palabra por palabra soa a ler: mellor ideas clave e falar.</span><span class="es"><b>Guion o puntos clave.</b> Leído palabra por palabra suena a leer: mejor ideas clave y hablar.</span></span></div>
+    <div class="tip"><b>🎧</b><span><span class="gl"><b>Pinta con son</b>: un ambiente ou un efecto vale máis que unha descrición longa.</span><span class="es"><b>Pinta con sonido</b>: un ambiente o un efecto vale más que una descripción larga.</span></span></div>
+  </div>
+
+  <h3><span class="gl">O equipo: roles</span><span class="es">El equipo: roles</span></h3>
+  <table>
+    <tr><td>🎙️ <b><span class="gl">Presentación</span><span class="es">Presentación</span></b></td><td><span class="gl">Conduce, dá paso, controla o ritmo.</span><span class="es">Conduce, da paso, controla el ritmo.</span></td></tr>
+    <tr><td>🎛️ <b><span class="gl">Técnica</span><span class="es">Técnica</span></b></td><td><span class="gl">Mesa: niveis, REC, pads e mutes.</span><span class="es">Mesa: niveles, REC, pads y mutes.</span></td></tr>
+    <tr><td>✍️ <b><span class="gl">Guion</span><span class="es">Guion</span></b></td><td><span class="gl">Prepara textos, preguntas e a escaleta.</span><span class="es">Prepara textos, preguntas y la escaleta.</span></td></tr>
+    <tr><td>⏱️ <b><span class="gl">Produción</span><span class="es">Producción</span></b></td><td><span class="gl">Controla o tempo e fai sinais (cortar, alongar).</span><span class="es">Controla el tiempo y hace señales (cortar, alargar).</span></td></tr>
+    <tr><td>💬 <b><span class="gl">Convidados</span><span class="es">Invitados</span></b></td><td><span class="gl">Opcional: entrevistas, testemuños.</span><span class="es">Opcional: entrevistas, testimonios.</span></td></tr>
+  </table>
+
+  <h3><span class="gl">Música, sons e permisos</span><span class="es">Música, sonidos y permisos</span></h3>
+  <div class="note red"><span class="gl"><b>Música:</b> só propia ou con licenza libre (Creative Commons, bibliotecas de música libre) e citando a autoría. Unha canción comercial pode facer que retiren o podcast.<br><b>Persoas:</b> pídelle permiso a quen sae, non digas datos persoais e segue as normas do centro sobre gravacións do alumnado.</span><span class="es"><b>Música:</b> solo propia o con licencia libre (Creative Commons, bibliotecas de música libre) y citando la autoría. Una canción comercial puede hacer que retiren el podcast.<br><b>Personas:</b> pide permiso a quien sale, no digas datos personales y sigue las normas del centro sobre grabaciones del alumnado.</span></div>
+
+  <h3><span class="gl">Sen ideas? Xerador</span><span class="es">¿Sin ideas? Generador</span></h3>
+  <div class="card">
+    <div class="idea" id="idea"></div>
+    <button class="btn pri" id="ideaBtn"><span class="gl">🎲 Dáme unha idea</span><span class="es">🎲 Dame una idea</span></button>
+  </div>
+
+  <h3><span class="gl">Ficha do noso podcast</span><span class="es">Ficha de nuestro podcast</span></h3>
+  <div class="card form" id="ficha"></div>
+  <div class="row"><button class="btn" id="fichaCopy"><span class="gl">📋 Copiar ficha</span><span class="es">📋 Copiar ficha</span></button><span id="fichaMsg" style="color:var(--mut);font-size:14px"></span></div>
+
+  <div class="prueba" data-p="8"><b class="t"><span class="gl">Proba <span class="pn"></span> · A ficha</span><span class="es">Prueba <span class="pn"></span> · La ficha</span></b><p><span class="gl">Cada grupo enche a ficha: nome, tema nunha frase, público, formato, duración e roles.</span><span class="es">Cada grupo rellena la ficha: nombre, tema en una frase, público, formato, duración y roles.</span></p></div>
+</section>
+
+<!-- MESA -->
+<section id="mesa" data-gl="A mesa" data-es="La mesa">
+  <h2><small><span class="gl">4 · A mesa · 1</span><span class="es">4 · La mesa · 1</span></small><span class="gl">Coñece a mesa</span><span class="es">Conoce la mesa</span></h2>
+  <p class="lead"><span class="gl">Toca os números ou as pezas do debuxo. A numeración é a mesma do manual oficial de RØDE.</span><span class="es">Toca los números o las piezas del dibujo. La numeración es la misma que la del manual oficial de RØDE.</span></p>
+  <p><a href="https://rode.com/es-es/user-guides/rodecaster-pro-ii"><span class="gl">📷 Ver as fotos numeradas na web de RØDE</span><span class="es">📷 Ver las fotos numeradas en la web de RØDE</span></a></p>
+  <div class="row" style="margin-bottom:10px"><div class="seg" id="viewSeg"><button class="on" data-v="top"><span class="gl">Vista superior</span><span class="es">Vista superior</span></button><button data-v="back"><span class="gl">Vista traseira</span><span class="es">Vista trasera</span></button></div></div>
+  <div class="card" style="padding:8px" id="diag"></div>
+  <div class="card" id="pinfo"></div>
+  <div class="parts" id="parts"></div>
+  <div class="prueba" data-p="1"><b class="t"><span class="gl">Proba <span class="pn"></span> · Recoñecemento</span><span class="es">Prueba <span class="pn"></span> · Reconocimiento</span></b><p><span class="gl">Coa mesa apagada, cada participante sinala onde vai o micro 1, os cascos 1, a tarxeta e os altofalantes.</span><span class="es">Con la mesa apagada, cada participante señala dónde va el micro 1, los cascos 1, la tarjeta y los altavoces.</span></p></div>
+  <h3><span class="gl">Acender, apagar e o «Show»</span><span class="es">Encender, apagar y el «Show»</span></h3>
+  <ol class="steps tick" data-k="on">
+    <li><span class="gl">Conecta a fonte e preme o <b>botón vermello</b> de atrás.</span><span class="es">Conecta la fuente y pulsa el <b>botón rojo</b> de atrás.</span></li>
+    <li><span class="gl">A primeira vez pide o <b>idioma</b>.</span><span class="es">La primera vez pide el <b>idioma</b>.</span></li>
+    <li><span class="gl">Despois propón conectarse a internet (wifi, Ethernet ou USB) para <b>actualizar o firmware</b>. Facédeo unha vez antes do obradoiro, con calma.</span><span class="es">Después propone conectarse a internet (wifi, Ethernet o USB) para <b>actualizar el firmware</b>. Hacedlo una vez antes del taller, con calma.</span></li>
+    <li><span class="gl">Toda a configuración (canles, pads, procesado) gárdase nun <b>Show</b>. Para empezar de cero co asistente: icona <b>Show</b> (arriba á dereita) → «New Show».</span><span class="es">Toda la configuración (canales, pads, procesado) se guarda en un <b>Show</b>. Para empezar de cero con el asistente: icono <b>Show</b> (arriba a la derecha) → «New Show».</span></li>
+    <li><span class="gl"><b>Apagar:</b> manter premido o botón de acendido uns segundos.</span><span class="es"><b>Apagar:</b> mantener pulsado el botón de encendido unos segundos.</span></li>
+  </ol>
+  <div class="note"><span class="gl">Consello: crea un Show chamado «Obradoiro podcast» coa configuración boa. Se alguén desconfigura algo, vólvese cargar e listo.</span><span class="es">Consejo: crea un Show llamado «Taller podcast» con la configuración buena. Si alguien desconfigura algo, se vuelve a cargar y listo.</span></div>
+</section>
+
+<!-- MICROS -->
+<section id="micros" data-gl="Micrófonos" data-es="Micrófonos">
+  <h2><small><span class="gl">4 · A mesa · 2</span><span class="es">4 · La mesa · 2</span></small><span class="gl">Micrófonos</span><span class="es">Micrófonos</span></h2>
+  <p class="lead"><span class="gl">Primeiro, coñece o teu micro. Despois, conéctao á mesa.</span><span class="es">Primero, conoce tu micro. Después, conéctalo a la mesa.</span></p>
+
+  <h3><span class="gl">Os dous tipos que máis verás</span><span class="es">Los dos tipos que más verás</span></h3>
+  <div class="grid2">
+    <div class="card mt">
+      <div class="mtic">🎤</div>
+      <b><span class="gl">Dinámico</span><span class="es">Dinámico</span></b>
+      <ul>
+        <li><span class="gl">Resistente e pouco sensible: <b>capta sobre todo a túa voz</b> e pouco a sala.</span><span class="es">Resistente y poco sensible: <b>capta sobre todo tu voz</b> y poco la sala.</span></li>
+        <li><span class="gl"><b>Non precisa phantom.</b></span><span class="es"><b>No necesita phantom.</b></span></li>
+        <li><span class="gl">Fálase <b>moi preto</b>: 5-10 cm (uns catro dedos).</span><span class="es">Se habla <b>muy cerca</b>: 5-10 cm (unos cuatro dedos).</span></li>
+        <li><span class="gl">👍 O mellor para podcast nunha sala normal (biblioteca, a aula).</span><span class="es">👍 El mejor para podcast en una sala normal (biblioteca, el aula).</span></li>
+      </ul>
+    </div>
+    <div class="card mt">
+      <div class="mtic">🎙️</div>
+      <b><span class="gl">Condensador</span><span class="es">Condensador</span></b>
+      <ul>
+        <li><span class="gl">Moi sensible e detallado: <b>capta a voz… e tamén a sala</b>, os papeis, o aire acondicionado.</span><span class="es">Muy sensible y detallado: <b>capta la voz… y también la sala</b>, los papeles, el aire acondicionado.</span></li>
+        <li><span class="gl"><b>Precisa phantom (48 V)</b>: actívase na pantalla da canle.</span><span class="es"><b>Necesita phantom (48 V)</b>: se activa en la pantalla del canal.</span></li>
+        <li><span class="gl">Fálase <b>algo máis lonxe</b>: 15-20 cm (un palmo).</span><span class="es">Se habla <b>algo más lejos</b>: 15-20 cm (un palmo).</span></li>
+        <li><span class="gl">👍 Bo en salas silenciosas, para locución e ficción.</span><span class="es">👍 Bueno en salas silenciosas, para locución y ficción.</span></li>
+      </ul>
+    </div>
+  </div>
+  <details><summary><span class="gl">E os de lapela e os USB?</span><span class="es">¿Y los de solapa y los USB?</span></summary><div>
+    <span class="gl"><b>De lapela (lavalier):</b> pequenos, van na roupa. Útiles para vídeo ou se a persoa se move. Coidado co roce da roupa.<br><b>USB:</b> conéctanse directamente ao ordenador (ou ao USB 2 da mesa, se son de RØDE). Prácticos, pero non pasan polo procesado da mesa.</span>
+    <span class="es"><b>De solapa (lavalier):</b> pequeños, van en la ropa. Útiles para vídeo o si la persona se mueve. Cuidado con el roce de la ropa.<br><b>USB:</b> se conectan directamente al ordenador (o al USB 2 de la mesa, si son de RØDE). Prácticos, pero no pasan por el procesado de la mesa.</span>
+  </div></details>
+
+  <h3><span class="gl">Por onde escoita? (patrón polar)</span><span class="es">¿Por dónde escucha? (patrón polar)</span></h3>
+  <div class="polars">
+    <div class="card pol"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#444" stroke-dasharray="3 3"/><path d="M50 88 C 18 88, 8 50, 22 28 C 32 12, 68 12, 78 28 C 92 50, 82 88, 50 88 Z" transform="rotate(180 50 50)" fill="#ff3b3b33" stroke="#ff3b3b" stroke-width="2.5"/><circle cx="50" cy="50" r="6" fill="#eee"/><text x="50" y="8" text-anchor="middle" fill="#9aa0a6" font-size="9">▲ voz</text></svg><b><span class="gl">Cardioide</span><span class="es">Cardioide</span></b><span><span class="gl">Escoita por diante. O habitual en podcast.</span><span class="es">Escucha por delante. El habitual en podcast.</span></span></div>
+    <div class="card pol"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#3d8bff33" stroke="#3d8bff" stroke-width="2.5"/><circle cx="50" cy="50" r="6" fill="#eee"/></svg><b><span class="gl">Omnidireccional</span><span class="es">Omnidireccional</span></b><span><span class="gl">Escoita por todas partes. Lapelas e grupos arredor dun micro.</span><span class="es">Escucha por todas partes. Solapas y grupos alrededor de un micro.</span></span></div>
+    <div class="card pol"><svg viewBox="0 0 100 100"><circle cx="50" cy="29" r="21" fill="#33d17a33" stroke="#33d17a" stroke-width="2.5"/><circle cx="50" cy="71" r="21" fill="#33d17a33" stroke="#33d17a" stroke-width="2.5"/><circle cx="50" cy="50" r="6" fill="#eee"/></svg><b><span class="gl">Figura de 8</span><span class="es">Figura de 8</span></b><span><span class="gl">Diante e detrás. Dúas persoas cara a cara.</span><span class="es">Delante y detrás. Dos personas cara a cara.</span></span></div>
+  </div>
+  <div class="note blue"><span class="gl"><b>Ollo:</b> uns micros fálanse <b>pola punta</b> e outros <b>polo lado</b>. Mira o modelo (ou onde ten o logo ou a reixa) antes de empezar.</span><span class="es"><b>Ojo:</b> unos micros se hablan <b>por la punta</b> y otros <b>por el lado</b>. Mira el modelo (o dónde tiene el logo o la rejilla) antes de empezar.</span></div>
+
+  <h3><span class="gl">Simulador: a distancia</span><span class="es">Simulador: la distancia</span></h3>
+  <div class="card">
+    <div class="seg" id="mtSeg"><button class="on" data-t="din"><span class="gl">Dinámico</span><span class="es">Dinámico</span></button><button data-t="con"><span class="gl">Condensador</span><span class="es">Condensador</span></button></div>
+    <div class="dsim">
+      <div class="dface">🙂</div>
+      <div class="dline"><div id="dgap"></div></div>
+      <div class="dmic">🎤</div>
+    </div>
+    <label style="font-weight:600"><span class="gl">Distancia</span><span class="es">Distancia</span>: <span id="dv">8</span> cm</label>
+    <input type="range" class="h" id="dist" min="2" max="40" value="8">
+    <div class="dbars">
+      <div><span><span class="gl">Voz</span><span class="es">Voz</span></span><div class="dbar"><i id="bVoz" style="background:var(--green)"></i></div></div>
+      <div><span><span class="gl">Sala e ruído</span><span class="es">Sala y ruido</span></span><div class="dbar"><i id="bSala" style="background:var(--amber)"></i></div></div>
+    </div>
+    <div class="fb" id="dfb"></div>
+  </div>
+
+  <h3><span class="gl">Usalo ben: 8 consellos</span><span class="es">Usarlo bien: 8 consejos</span></h3>
+  <div class="tips">
+    <div class="tip"><b>📏</b><span><span class="gl"><b>Sempre á mesma distancia.</b> Se te achegas e afastas, o volume sobe e baixa.</span><span class="es"><b>Siempre a la misma distancia.</b> Si te acercas y alejas, el volumen sube y baja.</span></span></div>
+    <div class="tip"><b>🎯</b><span><span class="gl"><b>Fala de fronte</b> ao micro e non xires a cabeza ao mirar á outra persoa: xira o corpo co micro.</span><span class="es"><b>Habla de frente</b> al micro y no gires la cabeza al mirar a la otra persona: gira el cuerpo con el micro.</span></span></div>
+    <div class="tip"><b>💨</b><span><span class="gl"><b>Os «p» e «b» estoupan</b> (plosivas). Pon o micro un pouco de lado ou usa un filtro antipop.</span><span class="es"><b>Las «p» y «b» explotan</b> (plosivas). Pon el micro un poco de lado o usa un filtro antipop.</span></span></div>
+    <div class="tip"><b>✋</b><span><span class="gl"><b>Non toques</b> o micro, o pé nin a mesa mentres gravas: todo se oe.</span><span class="es"><b>No toques</b> el micro, el pie ni la mesa mientras grabas: todo se oye.</span></span></div>
+    <div class="tip"><b>📄</b><span><span class="gl"><b>Papeis en silencio</b>: follas soltas, sen grampas, e pasalas devagar. Ou lé na tableta.</span><span class="es"><b>Papeles en silencio</b>: hojas sueltas, sin grapas, y pasarlas despacio. O lee en la tableta.</span></span></div>
+    <div class="tip"><b>😂</b><span><span class="gl"><b>Se ris ou berras</b>, sepárate un pouco. Se falas baixiño, achégate un pouco.</span><span class="es"><b>Si te ríes o gritas</b>, sepárate un poco. Si hablas bajito, acércate un poco.</span></span></div>
+    <div class="tip"><b>👥</b><span><span class="gl"><b>Un micro por persoa.</b> E os micros apuntando a cada boca, non aos outros.</span><span class="es"><b>Un micro por persona.</b> Y los micros apuntando a cada boca, no a los demás.</span></span></div>
+    <div class="tip"><b>📵</b><span><span class="gl"><b>Móbiles en silencio</b> e lonxe da mesa (interfiren e vibran).</span><span class="es"><b>Móviles en silencio</b> y lejos de la mesa (interfieren y vibran).</span></span></div>
+  </div>
+
+  <h3><span class="gl">Conectar o micro á mesa</span><span class="es">Conectar el micro a la mesa</span></h3>
+  <p class="lead"><span class="gl">Toca cada paso cando o fagas.</span><span class="es">Toca cada paso cuando lo hayas hecho.</span></p>
+  <ol class="steps tick" data-k="mic">
+    <li><span class="gl"><b>Baixa o fader 1 de todo</b> antes de conectar nada.</span><span class="es"><b>Baja el fader 1 del todo</b> antes de enchufar nada.</span></li>
+    <li><span class="gl">Conecta o micro á <b>entrada 1</b> cun cable XLR. De serie, as entradas 1-4 van aos faders 1-4.</span><span class="es">Conecta el micro a la <b>entrada 1</b> con un cable XLR. Por defecto, las entradas 1-4 van a los faders 1-4.</span></li>
+    <li><span class="gl">Conecta uns cascos á <b>saída de cascos 1</b>, co volume baixo.</span><span class="es">Conecta unos cascos a la <b>salida de cascos 1</b>, con el volumen bajo.</span></li>
+    <li><span class="gl">Preme o <b>botón da canle 1</b> (enriba do fader): ábrese a pantalla da canle.</span><span class="es">Pulsa el <b>botón del canal 1</b> (encima del fader): se abre la pantalla del canal.</span></li>
+    <li><span class="gl">Na lista de micros («mic locker») escolle o modelo. Se non aparece: <b>universal dinámico</b> ou <b>universal de condensador</b>. Así axústase o nivel e, se fai falta, a <b>alimentación phantom</b> (tamén se activa a man).</span><span class="es">En la lista de micros («mic locker») elige el modelo. Si no aparece: <b>universal dinámico</b> o <b>universal de condensador</b>. Así se ajusta el nivel y, si hace falta, la <b>alimentación phantom</b> (también se activa a mano).</span></li>
+    <li><span class="gl">Axusta a <b>ganancia</b> mirando o medidor mentres falas (proba o simulador ↓).</span><span class="es">Ajusta la <b>ganancia</b> mirando el medidor mientras hablas (prueba el simulador ↓).</span></li>
+    <li><span class="gl">Sobe o fader 1 ata a <b>liña grosa</b>: a «ganancia unidade», o son sae tal como entra.</span><span class="es">Sube el fader 1 hasta la <b>línea gruesa</b>: la «ganancia unidad», el sonido sale tal como entra.</span></li>
+    <li><span class="gl">Sobe os cascos 1 ata un nivel cómodo.</span><span class="es">Sube los cascos 1 hasta un nivel cómodo.</span></li>
+  </ol>
+  <h3><span class="gl">Simulador: ganancia e fader</span><span class="es">Simulador: ganancia y fader</span></h3>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <p style="margin-top:0"><span class="gl">1. Mantén premido <b>Falar</b> e move a <b>ganancia</b> ata que os picos caian na franxa marcada (entre −6 e −3 dB).</span><span class="es">1. Mantén pulsado <b>Hablar</b> y mueve la <b>ganancia</b> hasta que los picos caigan en la franja marcada (entre −6 y −3 dB).</span></p>
+        <label style="font-weight:600"><span class="gl">Ganancia</span><span class="es">Ganancia</span>: <span id="gv">20</span> dB</label>
+        <input type="range" class="h" id="gain" min="0" max="76" value="20">
+        <p><span class="gl">2. Despois sobe o <b>fader</b> ata a liña branca (unidade). Fíxate: o medidor de <b>entrada</b> móvese aínda que o fader estea abaixo, porque o fader só controla o que <b>sae</b>.</span><span class="es">2. Después sube el <b>fader</b> a la línea blanca (unidad). Fíjate: el medidor de <b>entrada</b> se mueve aunque el fader esté abajo, porque el fader solo controla lo que <b>sale</b>.</span></p>
+        <div class="row"><button class="btn pri" id="talk"><span class="gl">🎙️ Mantén para falar</span><span class="es">🎙️ Mantén para hablar</span></button><span class="tog" id="hold"><span class="sw"></span><span class="gl">Fala continua</span><span class="es">Habla continua</span></span></div>
+        <div class="fb" id="mfb" style="background:var(--panel2)"></div>
+      </div>
+      <div class="meters">
+        <div><div class="meter" id="mIn"><div class="zone" id="zone"></div><i></i><div class="pk"></div></div><div class="mlab"><span class="gl">ENTRADA</span><span class="es">ENTRADA</span></div></div>
+        <div><div class="fwrap"><input type="range" class="fader" id="fader" min="0" max="100" value="0"><div class="unity" id="unity"></div></div><div class="mlab">FADER</div></div>
+        <div><div class="meter" id="mOut"><i></i><div class="pk"></div></div><div class="mlab"><span class="gl">SAÍDA</span><span class="es">SALIDA</span></div></div>
+      </div>
+    </div>
+    <div class="read" id="peakTxt">— dB</div>
+  </div>
+  <div class="note"><span class="gl"><b>Niveis orientativos:</b> picos entre −6 e −3 dB, nivel medio arredor de −12/−15 dB. Se chega ao vermello, baixa a <b>ganancia</b> (non o fader). Se case non se move, sobe a ganancia ou achégate ao micro.</span><span class="es"><b>Niveles orientativos:</b> picos entre −6 y −3 dB, nivel medio sobre −12/−15 dB. Si llega al rojo, baja la <b>ganancia</b> (no el fader). Si apenas se mueve, sube la ganancia o acércate al micro.</span></div>
+  <details><summary><span class="gl">E o procesado (APHEX)?</span><span class="es">¿Y el procesado (APHEX)?</span></summary><div><span class="gl">Cada canle ten procesado APHEX: filtro de graves, de-esser, porta de ruído, compresor, ecualizador… con presets. Para o obradoiro abonda co preset do micro; non fai falta tocar máis.</span><span class="es">Cada canal tiene procesado APHEX: filtro de graves, de-esser, puerta de ruido, compresor, ecualizador… con presets. Para el taller basta con el preset del micro; no hace falta tocar más.</span></div></details>
+  <div class="prueba" data-p="2"><b class="t"><span class="gl">Proba <span class="pn"></span> · Proba de son</span><span class="es">Prueba <span class="pn"></span> · Prueba de sonido</span></b><p><span class="gl">Cada persoa di o seu nome e conta ata dez co seu volume normal, á distancia boa para o seu micro. Axustamos a ganancia de cada canle ata que todas marquen parecido. Repetir cos 4 micros.</span><span class="es">Cada persona dice su nombre y cuenta hasta diez a su volumen normal, a la distancia buena para su micro. Ajustamos la ganancia de cada canal hasta que todos marquen parecido. Repetir con los 4 micros.</span></p></div>
+</section>
+
+<!-- CASCOS -->
+<section id="cascos" data-gl="Cascos" data-es="Cascos">
+  <h2><small><span class="gl">4 · A mesa · 3</span><span class="es">4 · La mesa · 3</span></small><span class="gl">Cascos</span><span class="es">Cascos</span></h2>
+  <ol class="steps tick" data-k="hp">
+    <li><span class="gl">Hai <b>4 saídas de cascos</b> atrás; cada unha ten o seu control de volume arriba.</span><span class="es">Hay <b>4 salidas de cascos</b> atrás; cada una tiene su control de volumen arriba.</span></li>
+    <li><span class="gl">Quen presente ou leve a técnica usa a <b>saída 1</b>.</span><span class="es">Quien presente o lleve la técnica usa la <b>salida 1</b>.</span></li>
+    <li><span class="gl"><b>Empeza sempre co volume baixo</b> e sobe despois, para evitar sustos.</span><span class="es"><b>Empieza siempre con el volumen bajo</b> y sube después, para evitar sustos.</span></li>
+    <li><span class="gl">Tipo de cascos: Axustes (engrenaxe) → «Outputs» → «Headphones» → sensibilidade alta ou baixa. Así os volumes quedan máis parecidos.</span><span class="es">Tipo de cascos: Ajustes (engranaje) → «Outputs» → «Headphones» → sensibilidad alta o baja. Así los volúmenes quedan más parecidos.</span></li>
+  </ol>
+  <h3><span class="gl">Botóns de cada canle</span><span class="es">Botones de cada canal</span></h3>
+  <div class="grid2">
+    <div class="card"><b style="color:var(--amber)">LISTEN</b><br><span class="gl">Escoitas só esa canle nos teus cascos. Escóllese se é antes ou despois do fader en Axustes → «Outputs» → «Listen».</span><span class="es">Escuchas solo ese canal en tus cascos. Se elige si es antes o después del fader en Ajustes → «Outputs» → «Listen».</span></div>
+    <div class="card"><b style="color:var(--red)">MUTE</b><br><span class="gl">Silencia a canle. Útil para tusir ou falar fóra de antena.</span><span class="es">Silencia el canal. Útil para toser o hablar fuera de antena.</span></div>
+  </div>
+  <div class="card"><b><span class="gl">LISTEN + MUTE á vez → «Back Channel»</span><span class="es">LISTEN + MUTE a la vez → «Back Channel»</span></b><br><span class="gl">Para falar cun convidado sen que saia na gravación.</span><span class="es">Para hablar con un invitado sin que salga en la grabación.</span></div>
+  <div class="prueba" data-p="3"><b class="t"><span class="gl">Proba <span class="pn"></span> · Cascos</span><span class="es">Prueba <span class="pn"></span> · Cascos</span></b><p><span class="gl">Cada persoa ponse os cascos, axusta o seu volume e proba Mute mentres fala un compañeiro.</span><span class="es">Cada persona se pone sus cascos, ajusta su volumen y prueba Mute mientras habla un compañero.</span></p></div>
+</section>
+
+<!-- ALTAVOCES -->
+<section id="altavoces" data-gl="Altofalantes" data-es="Altavoces">
+  <h2><small><span class="gl">4 · A mesa · 4</span><span class="es">4 · La mesa · 4</span></small><span class="gl">Altofalantes</span><span class="es">Altavoces</span></h2>
+  <ol class="steps tick" data-k="spk">
+    <li><span class="gl">Conecta os altofalantes ás <b>dúas saídas de liña</b> (L e R) con cables TRS balanceados, que evitan zumbidos.</span><span class="es">Conecta los altavoces a las <b>dos salidas de línea</b> (L y R) con cables TRS balanceados, que evitan zumbidos.</span></li>
+    <li><span class="gl">O volume contrólase co <b>codificador rotatorio</b> (o mando grande).</span><span class="es">El volumen se controla con el <b>codificador rotatorio</b> (el mando grande).</span></li>
+    <li><span class="gl">Axustes → «Outputs» → «Monitor»: o <b>Auto-mute</b> cala os altofalantes cando hai un micro aberto (evita o asubío do acople). <b>Déixao activado</b> se gravades na mesma sala.</span><span class="es">Ajustes → «Outputs» → «Monitor»: el <b>Auto-mute</b> silencia los altavoces cuando hay un micro abierto (evita el pitido de acople). <b>Déjalo activado</b> si grabáis en la misma sala.</span></li>
+    <li><span class="gl">«Fixed Output Level» (nivel fixo): útil se mandades o sinal a outro equipo (megafonía, emisión) e queredes un nivel estable.</span><span class="es">«Fixed Output Level» (nivel fijo): útil si mandáis la señal a otro equipo (megafonía, emisión) y queréis un nivel estable.</span></li>
+  </ol>
+  <h3><span class="gl">Simulador: a icona do altofalante</span><span class="es">Simulador: el icono de altavoz</span></h3>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <div class="mon" id="mon"><svg viewBox="0 0 24 24" fill="#ddd"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg></div>
+        <p class="fb" id="monTxt" style="background:var(--panel2)"></p>
+      </div>
+      <div>
+        <span class="tog on" id="tAuto"><span class="sw"></span><span class="gl">Auto-mute activado</span><span class="es">Auto-mute activado</span></span>
+        <span class="tog" id="tMic"><span class="sw"></span><span class="gl">Fader dun micro subido</span><span class="es">Fader de un micro subido</span></span>
+        <p style="margin:12px 0 6px;font-size:14px;color:var(--mut)"><span class="gl">Mando grande: <b>mantén 2 segundos</b> para activar/desactivar os altofalantes.</span><span class="es">Mando grande: <b>mantén 2 segundos</b> para activar/desactivar los altavoces.</span></p>
+        <div class="dial" id="dial"><span class="gl">mantén<br>2 s</span><span class="es">mantén<br>2 s</span></div>
+        <div class="row" style="justify-content:center;margin-top:12px"><button class="btn" id="padSnd"><span class="gl">▶ Lanzar son dun pad</span><span class="es">▶ Lanzar sonido de un pad</span></button></div>
+      </div>
+    </div>
+  </div>
+  <div class="legend card">
+    <span class="dot" style="background:var(--green)"></span><span><span class="gl"><b>Verde:</b> soa polos altofalantes.</span><span class="es"><b>Verde:</b> suena por los altavoces.</span></span>
+    <span class="dot" style="background:var(--amber)"></span><span><span class="gl"><b>Ámbar:</b> calados temporalmente (micro aberto).</span><span class="es"><b>Ámbar:</b> silenciados temporalmente (micro abierto).</span></span>
+    <span class="dot" style="background:var(--red)"></span><span><span class="gl"><b>Vermello con cruz:</b> saída de altofalantes desactivada.</span><span class="es"><b>Rojo con cruz:</b> salida de altavoces desactivada.</span></span>
+  </div>
+  <div class="note red"><span class="gl">Se desactivas o auto-mute, baixa antes os altofalantes: o micro pode collelos e acoplar.</span><span class="es">Si desactivas el auto-mute, baja antes los altavoces: el micro puede captarlos y acoplar.</span></div>
+  <div class="prueba" data-p="4"><b class="t"><span class="gl">Proba <span class="pn"></span> · Altofalantes</span><span class="es">Prueba <span class="pn"></span> · Altavoces</span></b><p><span class="gl">Lanzar un son dun pad cos micros pechados (soa) e logo subir un fader de micro (cálanse, anel ámbar).</span><span class="es">Lanzar un sonido de un pad con los micros cerrados (suena) y luego subir un fader de micro (se silencian, anillo ámbar).</span></p></div>
+</section>
+
+<!-- GRABAR -->
+<section id="grabar" data-gl="Gravar" data-es="Grabar">
+  <h2><small><span class="gl">4 · A mesa · 5</span><span class="es">4 · La mesa · 5</span></small><span class="gl">Gravar en tarxeta microSD</span><span class="es">Grabar en tarjeta microSD</span></h2>
+  <h3><span class="gl">Preparar a tarxeta</span><span class="es">Preparar la tarjeta</span></h3>
+  <ol class="steps tick" data-k="sd">
+    <li><span class="gl">Coa mesa apagada, mete a microSD na ranura de atrás ata que faga <b>clic</b>.</span><span class="es">Con la mesa apagada, mete la microSD en la ranura de atrás hasta que haga <b>clic</b>.</span></li>
+    <li><span class="gl">Ao acender, se o formato non vale, aparece un aviso para <b>formatala</b>. ⚠️ Formatar <b>borra todo</b>.</span><span class="es">Al encender, si el formato no vale, aparece un aviso para <b>formatearla</b>. ⚠️ Formatear <b>borra todo</b>.</span></li>
+    <li><span class="gl">Escolle <b>estéreo</b> (un ficheiro coa mestura) ou <b>multipista</b> (un ficheiro por canle + a mestura). Para o obradoiro: <b>multipista</b>, así despois arránxase unha voz soa. Cámbiase en Axustes → «Outputs» → «Multitrack» (comprobádeo no voso firmware; a opción de USB vai á parte).</span><span class="es">Elige <b>estéreo</b> (un archivo con la mezcla) o <b>multipista</b> (un archivo por canal + la mezcla). Para el taller: <b>multipista</b>, así luego se arregla una voz sola. Se cambia en Ajustes → «Outputs» → «Multitrack» (comprobadlo en vuestro firmware; la opción de USB va aparte).</span></li>
+  </ol>
+  <h3><span class="gl">Simulador: botón REC</span><span class="es">Simulador: botón REC</span></h3>
+  <div class="card">
+    <div class="grid2">
+      <div class="recwrap">
+        <button class="recbtn" id="rec">REC</button>
+        <div class="timer" id="timer">00:00</div>
+        <div class="fb" id="recTxt" style="background:var(--panel2);width:100%"></div>
+        <span class="tog on" id="tCard"><span class="sw"></span><span class="gl">Tarxeta metida</span><span class="es">Tarjeta metida</span></span>
+      </div>
+      <div>
+        <p style="margin-top:0"><span class="gl"><b>Toca</b> para gravar ou pausar. <b>Mantén premido</b> para parar.</span><span class="es"><b>Toca</b> para grabar o pausar. <b>Mantén pulsado</b> para parar.</span></p>
+        <div class="legend">
+          <span class="dot" style="background:var(--green)"></span><span><span class="gl"><b>Verde:</b> lista para gravar</span><span class="es"><b>Verde:</b> lista para grabar</span></span>
+          <span class="dot" style="background:var(--red)"></span><span><span class="gl"><b>Vermello:</b> gravando (sae un contador)</span><span class="es"><b>Rojo:</b> grabando (sale un contador)</span></span>
+          <span class="dot" style="background:var(--amber)"></span><span><span class="gl"><b>Ámbar:</b> en pausa → toca para seguir</span><span class="es"><b>Ámbar:</b> en pausa → toca para seguir</span></span>
+          <span class="dot" style="background:var(--blue)"></span><span><span class="gl"><b>Azul:</b> non hai tarxeta ou non pode gravar</span><span class="es"><b>Azul:</b> no hay tarjeta o no puede grabar</span></span>
+        </div>
+        <p style="font-size:14px;color:var(--mut)"><span class="gl">As gravacións que fagas aquí aparecen no bloque <b>Ficheiros</b>.</span><span class="es">Las grabaciones que hagas aquí aparecen en el bloque <b>Archivos</b>.</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="prueba" data-p="5"><b class="t"><span class="gl">Proba <span class="pn"></span> · Primeira gravación</span><span class="es">Prueba <span class="pn"></span> · Primera grabación</span></b><p><span class="gl">Gravar 1 minuto con dúas voces, facer unha pausa a metade e parar.</span><span class="es">Grabar 1 minuto con dos voces, hacer una pausa a mitad y parar.</span></p></div>
+</section>
+
+<!-- ARCHIVOS -->
+<section id="archivos" data-gl="Ficheiros" data-es="Archivos">
+  <h2><small><span class="gl">4 · A mesa · 6</span><span class="es">4 · La mesa · 6</span></small><span class="gl">Escoitar e atopar as gravacións</span><span class="es">Escuchar y encontrar las grabaciones</span></h2>
+  <h3><span class="gl">Na propia mesa</span><span class="es">En la propia mesa</span></h3>
+  <ol class="steps tick" data-k="pl">
+    <li><span class="gl">Icona <b>Show</b> → «Recordings».</span><span class="es">Icono <b>Show</b> → «Recordings».</span></li>
+    <li><span class="gl">A de número máis alto adoita ser a última. Tócaa e preme reproducir.</span><span class="es">La de número más alto suele ser la última. Tócala y pulsa reproducir.</span></li>
+    <li><span class="gl">Ollo: coa pantalla de reprodución aberta, <b>o resto da mesa queda en silencio</b>.</span><span class="es">Ojo: con la pantalla de reproducción abierta, <b>el resto de la mesa queda en silencio</b>.</span></li>
+  </ol>
+  <h3><span class="gl">Así queda a tarxeta</span><span class="es">Así queda la tarjeta</span></h3>
+  <p class="lead"><span class="gl">Toca os cartafoles para abrilos.</span><span class="es">Toca las carpetas para abrirlas.</span></p>
+  <div class="tree" id="tree"></div>
+  <p style="font-size:13px;color:var(--mut)"><span class="gl">Estrutura segundo guías de uso da mesa; comprobádeo coa vosa tarxeta.</span><span class="es">Estructura según guías de uso de la mesa; comprobadlo con vuestra tarjeta.</span></p>
+  <h3><span class="gl">Pasalo ao ordenador</span><span class="es">Pasarlo al ordenador</span></h3>
+  <div class="grid2">
+    <div class="card"><b><span class="gl">💳 Con lector de tarxetas</span><span class="es">💳 Con lector de tarjetas</span></b><br><span class="gl">Apagar a mesa, sacar a microSD, metela no lector e arrastrar os ficheiros ao ordenador.</span><span class="es">Apagar la mesa, sacar la microSD, meterla en el lector y arrastrar los archivos al ordenador.</span></div>
+    <div class="card"><b><span class="gl">🔌 Con cable USB</span><span class="es">🔌 Con cable USB</span></b><br><span class="gl">Ordenador ao <b>USB 1</b> + <b>RØDECaster App</b> (de balde, Mac e Windows) → «Transfer Recordings». Mentres transfire, a mesa non fai nada máis de son. Desde a app tamén se poden <b>borrar</b> gravacións (para sempre).</span><span class="es">Ordenador al <b>USB 1</b> + <b>RØDECaster App</b> (gratis, Mac y Windows) → «Transfer Recordings». Mientras transfiere, la mesa no hace nada más de audio. Desde la app también se pueden <b>borrar</b> grabaciones (para siempre).</span></div>
+  </div>
+  <div class="note"><span class="gl">Despois de cada sesión: copiar ao cartafol do centro e renomear con data e grupo.</span><span class="es">Después de cada sesión: copiar a la carpeta del centro y renombrar con fecha y grupo.</span></div>
+  <div class="prueba" data-p="6"><b class="t"><span class="gl">Proba <span class="pn"></span> · Atopar a gravación</span><span class="es">Prueba <span class="pn"></span> · Encontrar la grabación</span></b><p><span class="gl">Reproducir na mesa a gravación da proba anterior e despois localizala no ordenador.</span><span class="es">Reproducir en la mesa la grabación de la prueba anterior y después localizarla en el ordenador.</span></p></div>
+</section>
+
+<!-- PADS -->
+<section id="pads" data-gl="Pads" data-es="Pads">
+  <h2><small><span class="gl">4 · A mesa · 7</span><span class="es">4 · La mesa · 7</span></small><span class="gl">SMART pads: sintonías e efectos</span><span class="es">SMART pads: sintonías y efectos</span></h2>
+  <p class="lead"><span class="gl">8 pads × 8 bancos = <b>64 accións</b>. Toca un pad (exemplo de configuración para o obradoiro).</span><span class="es">8 pads × 8 bancos = <b>64 acciones</b>. Toca un pad (ejemplo de configuración para el taller).</span></p>
+  <div class="card">
+    <div class="pads" id="padGrid"></div>
+    <div class="banks"><button class="btn" id="bPrev">◀</button><span id="bank"></span><button class="btn" id="bNext">▶</button></div>
+    <div class="fb" id="padTxt" style="background:var(--panel2);margin-top:12px"></div>
+  </div>
+  <h3><span class="gl">Tipos de pad</span><span class="es">Tipos de pad</span></h3>
+  <table>
+    <tr><td><span class="kbd">Sound</span></td><td><span class="gl">Lanza un son: sintonía, aplausos, ráfagas…</span><span class="es">Lanza un sonido: sintonía, aplausos, ráfagas…</span></td></tr>
+    <tr><td><span class="kbd">Effects</span></td><td><span class="gl">Efectos de voz: reverberación, eco, megáfono e voz (robot, disfrace e cambio de ton). Escóllese a que micro se aplica.</span><span class="es">Efectos de voz: reverberación, eco, megáfono y voz (robot, disfraz y cambio de tono). Se elige a qué micro se aplica.</span></td></tr>
+    <tr><td><span class="kbd">Mixer</span></td><td><span class="gl">Accións da mesa.</span><span class="es">Acciones de la mesa.</span></td></tr>
+    <tr><td><span class="kbd">Trigger</span> <span class="kbd">Quick Dial</span></td><td><span class="gl">Funcións avanzadas (non as imos usar).</span><span class="es">Funciones avanzadas (no las usaremos).</span></td></tr>
+  </table>
+  <h3><span class="gl">Cargar unha sintonía</span><span class="es">Cargar una sintonía</span></h3>
+  <ol class="steps tick" data-k="pad">
+    <li><span class="gl">Toca a icona de pads na pantalla principal (ou Axustes → «SMART Pads»). Escolle un pad baleiro ou baléirao con «Clear».</span><span class="es">Toca el icono de pads en la pantalla principal (o Ajustes → «SMART Pads»). Elige un pad vacío o vacía uno con «Clear».</span></li>
+    <li><span class="gl">Conecta o ordenador por USB e abre a <b>RØDECaster App</b> → «Customise SMART Pads».</span><span class="es">Conecta el ordenador por USB y abre la <b>RØDECaster App</b> → «Customise SMART Pads».</span></li>
+    <li><span class="gl">Arrastra o ficheiro ao pad. Só acepta <b>MP3 ou WAV</b> (hai 4 GB internos para sons).</span><span class="es">Arrastra el archivo al pad. Solo acepta <b>MP3 o WAV</b> (hay 4 GB internos para sonidos).</span></li>
+    <li><span class="gl">Recorta o principio e o final e engade fundidos se fai falta.</span><span class="es">Recorta el principio y el final y añade fundidos si hace falta.</span></li>
+  </ol>
+  <div class="note blue"><span class="gl">Tamén se pode <b>gravar directamente nun pad</b> desde a mesa. Nos pads de efectos, co <b>Latching</b> activado prémese unha vez para acender e outra para apagar; sen el, só funciona mentres o manteñas premido.</span><span class="es">También se puede <b>grabar directamente en un pad</b> desde la mesa. En los pads de efectos, con <b>Latching</b> activado se pulsa una vez para encender y otra para apagar; sin él, solo funciona mientras lo mantienes pulsado.</span></div>
+  <div class="prueba" data-p="7"><b class="t"><span class="gl">Proba <span class="pn"></span> · Sintonía</span><span class="es">Prueba <span class="pn"></span> · Sintonía</span></b><p><span class="gl">Cargar a sintonía do podcast no pad 1 e facer unha entrada: sintonía → baixala → saúdo co micro.</span><span class="es">Cargar la sintonía del podcast en el pad 1 y hacer una entrada: sintonía → bajarla → saludo con el micro.</span></p></div>
+</section>
+
+<!-- EXTRA -->
+<section id="extra" data-gl="Ampliación" data-es="Ampliación">
+  <h2><small><span class="gl">Máis adiante</span><span class="es">Más adelante</span></small><span class="gl">Chamadas, directo e configuración</span><span class="es">Llamadas, directo y configuración</span></h2>
+  <details><summary><span class="gl">📞 Chamadas por Bluetooth (móbil)</span><span class="es">📞 Llamadas por Bluetooth (móvil)</span></summary><div>
+    <span class="gl"><ol><li>Axustes → «System» → «Bluetooth». Con esa pantalla aberta, a mesa é visible.</li><li>Emparella desde o móbil.</li><li><b>Asigna a canle Bluetooth a un fader.</b></li></ol>A mesa usa <b>mix-minus</b>: o convidado oe todo menos a súa propia voz (sen eco). Con iPhone, as chamadas normais só funcionan por Bluetooth, non por USB. Pon o móbil en <b>Non molestar</b>.</span>
+    <span class="es"><ol><li>Ajustes → «System» → «Bluetooth». Con esa pantalla abierta, la mesa es visible.</li><li>Empareja desde el móvil.</li><li><b>Asigna el canal Bluetooth a un fader.</b></li></ol>La mesa usa <b>mix-minus</b>: el invitado oye todo menos su propia voz (sin eco). Con iPhone, las llamadas normales solo funcionan por Bluetooth, no por USB. Pon el móvil en <b>No molestar</b>.</span>
+  </div></details>
+  <details><summary><span class="gl">📡 Emisión en directo</span><span class="es">📡 Emisión en directo</span></summary><div>
+    <span class="gl"><ul><li>A mesa <b>non emite soa</b>: fai falta un ordenador cun programa de emisión (OBS, por exemplo) ou unha plataforma web.</li><li>Polo <b>USB 1</b> aparece como «RØDECaster Pro II Main» (mestura principal) e «RØDECaster Pro II Chat». Polo <b>USB 2</b>, como «RØDECaster Pro II Secondary».</li><li>No programa de emisión, escolle a RØDECaster como entrada de son.</li><li>Plataforma no navegador con Windows: desactiva a multipista por USB ou conecta polo USB 2 e usa «Secondary».</li><li>Sen ordenador: manda a saída de altofalantes (con nivel fixo) a outro equipo de son ou de emisión.</li></ul></span>
+    <span class="es"><ul><li>La mesa <b>no emite sola</b>: hace falta un ordenador con un programa de emisión (OBS, por ejemplo) o una plataforma web.</li><li>Por <b>USB 1</b> aparece como «RØDECaster Pro II Main» (mezcla principal) y «RØDECaster Pro II Chat». Por <b>USB 2</b>, como «RØDECaster Pro II Secondary».</li><li>En el programa de emisión, elige la RØDECaster como entrada de audio.</li><li>Plataforma en el navegador con Windows: desactiva la multipista por USB o conecta por USB 2 y usa «Secondary».</li><li>Sin ordenador: manda la salida de altavoces (con nivel fijo) a otro equipo de sonido o de emisión.</li></ul></span>
+  </div></details>
+  <details><summary><span class="gl">💾 Gardar a configuración e restablecer</span><span class="es">💾 Guardar configuración y restablecer</span></summary><div>
+    <span class="gl">Todo (canles, pads, procesado) gárdase no <b>Show</b>, e pódese exportar como copia.<br><br><b>Restablecer de fábrica</b> (último recurso): Axustes → «System» → «Information» → «View Device Information» → «Erase and Reset Device». <b>Borra toda a configuración</b>: exporta antes o Show.</span>
+    <span class="es">Todo (canales, pads, procesado) se guarda en el <b>Show</b>, y se puede exportar como copia.<br><br><b>Restablecer de fábrica</b> (último recurso): Ajustes → «System» → «Information» → «View Device Information» → «Erase and Reset Device». <b>Borra toda la configuración</b>: exporta antes el Show.</span>
+  </div></details>
+</section>
+
+<!-- SESION -->
+<section id="sesion" data-gl="Lista da sesión" data-es="Lista de sesión">
+  <h2><small><span class="gl">Para cada sesión</span><span class="es">Para cada sesión</span></small><span class="gl">Lista de comprobación</span><span class="es">Lista de comprobación</span></h2>
+  <p class="lead"><span class="gl">Queda marcada neste navegador. Preme «Reiniciar» ao comezar outra sesión.</span><span class="es">Se queda marcada en este navegador. Pulsa «Reiniciar» al empezar otra sesión.</span></p>
+  <div class="card chk" id="chk"></div>
+  <button class="btn" id="chkReset"><span class="gl">↺ Reiniciar lista</span><span class="es">↺ Reiniciar lista</span></button>
+  <h3><span class="gl">Tes claro? Mini-test</span><span class="es">¿Lo tienes claro? Mini-test</span></h3>
+  <div id="quiz"></div>
+</section>
+
+<!-- PROBLEMAS -->
+<section id="problemas" data-gl="Problemas" data-es="Problemas">
+  <h2><small><span class="gl">Se algo falla</span><span class="es">Si algo falla</span></small><span class="gl">Problemas frecuentes</span><span class="es">Problemas frecuentes</span></h2>
+  <div id="probs"></div>
+  <h3><span class="gl">Fontes</span><span class="es">Fuentes</span></h3>
+  <ul style="font-size:14px">
+    <li><a href="https://rode.com/es-es/user-guides/rodecaster-pro-ii">Manual oficial RØDECaster Pro II</a></li>
+    <li><a href="https://rode.com/en-us/user-guides/rodecaster-pro-ii/how-to-get-started-with-the-rodecaster-pro-ii">How to Get Started (RØDE)</a></li>
+    <li><a href="https://rode.com/user-guides/rodecaster-pro-ii/recording-and-exporting-audio">Recording and Exporting Audio (RØDE)</a></li>
+    <li><a href="https://rode.com/en-fi/user-guides/rodecaster-pro-ii/setting-up-the-mixer-and-assigning-channels">Setting Up Channels and Outputs (RØDE)</a></li>
+    <li><a href="https://rode.com/user-guides/rodecaster-pro-ii/using-the-smart-pads">Using the SMART Pads (RØDE)</a></li>
+    <li><a href="https://rode.com/en/user-guides/rodecaster-pro-ii/using-rode-central">Using the RØDECaster App (RØDE)</a></li>
+    <li><a href="https://rode.com/user-guides/rodecaster-pro-ii/a-guide-to-setting-up-usb-connections-on-the-rodecaster-pro-ii">Setting Up USB Connections (RØDE)</a></li>
+    <li><a href="https://rode.com/en/user-guides/rodecaster-pro-ii/connecting-callers-and-online-guests">Connecting Callers and Online Guests (RØDE)</a></li>
+    <li><a href="https://help.rode.com/hc/en-us/articles/7373670524943">Monitor icon (RØDE Support)</a></li>
+    <li><a href="https://help.rode.com/hc/en-us/articles/10983661939471">Transfer recordings (RØDE Support)</a></li>
+    <li><a href="https://www.lib.uidaho.edu/studio/rodecaster.html">University of Idaho Library</a></li>
+    <li><a href="https://education.auburn.edu/about/learning-resources-center/record-microsd.pdf">Auburn University · Recording to microSD</a></li>
+  </ul>
+</section>
+
+<div class="pager"><button class="btn" id="prev"></button><button class="btn pri" id="next"></button></div>
+</main>
+<footer><span class="gl">Material de formación interno · Baseado no manual público de RØDE.</span><span class="es">Material de formación interno · Basado en el manual público de RØDE.</span></footer>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem('rcp2_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('rcp2_'+k,JSON.stringify(v))}catch(e){}}};
+let lang=store.get('lang','gl'); if(!['gl','es'].includes(lang)) lang='gl';
+const T=(gl,es)=>lang==='gl'?gl:es;
+const rerenders=[];
+
+/* ---------- LANG ---------- */
+function setLang(l){
+  lang=l; store.set('lang',l);
+  document.body.className=l; document.documentElement.lang=l;
+  $('#langCur').innerHTML=`<svg class="flag"><use href="#f-${l}"/></svg>`;
+  $('#langMenu').innerHTML=['gl','es'].filter(x=>x!==l).map(x=>`<button data-l="${x}" aria-label="${x}"><svg class="flag"><use href="#f-${x}"/></svg></button>`).join('');
+  $$('#langMenu button').forEach(b=>b.onclick=e=>{e.stopPropagation();$('#lang').classList.remove('open');setLang(b.dataset.l)});
+  rerenders.forEach(f=>f());
+}
+$('#langCur').onclick=e=>{e.stopPropagation();$('#lang').classList.toggle('open')};
+document.addEventListener('click',()=>$('#lang').classList.remove('open'));
+
+/* ---------- NAV (4 bloques) ---------- */
+const secs=$$('main section'), ids=secs.map(s=>s.id);
+const st=s=>s.dataset[lang];
+const blocks=[
+ ['inicio',['Inicio','Inicio'],['inicio']],
+ ['b1',['1 · Podcast','1 · Podcast'],['podcast']],
+ ['b2',['2 · Escaleta','2 · Escaleta'],['escaleta']],
+ ['b3',['3 · Contidos','3 · Contenidos'],['contido']],
+ ['b4',['4 · A mesa','4 · La mesa'],['mesa','micros','cascos','altavoces','grabar','archivos','pads','extra','sesion','problemas']]
+];
+const blockOf=id=>blocks.find(b=>b[2].includes(id))||blocks[0];
+const pruebaSec={10:'podcast',9:'escaleta',8:'contido',1:'mesa',2:'micros',3:'cascos',4:'altavoces',5:'grabar',6:'archivos',7:'pads'};
+const nPr=Object.keys(pruebaSec).length;
+let pruebas=store.get('pruebas',{});
+const secDone=id=>Object.entries(pruebaSec).some(([p,s])=>s===id&&pruebas[p]);
+function renderNav(){
+  $('#nav').innerHTML=blocks.map(b=>{
+    const pr=Object.entries(pruebaSec).filter(([p,s])=>b[2].includes(s));
+    const all=pr.length&&pr.every(([p])=>pruebas[p]);
+    return `<button data-b="${b[0]}">${T(...b[1])}${all?'<span class="ok">✓</span>':''}</button>`}).join('');
+  $$('#nav button').forEach(x=>x.onclick=()=>go(blocks.find(b=>b[0]===x.dataset.b)[2][0]));
+  markNav();
+}
+function cur(){const id=location.hash.slice(1);return ids.includes(id)?id:'inicio'}
+function markNav(){
+  const c=cur(), b=blockOf(c);
+  $$('#nav button').forEach(x=>x.classList.toggle('on',x.dataset.b===b[0]));
+  $('#subnav').innerHTML=b[2].length>1?b[2].map(id=>`<button data-id="${id}" class="${id===c?'on':''}">${st($('#'+id))}${secDone(id)?'<span class="ok">✓</span>':''}</button>`).join(''):'';
+  $$('#subnav button').forEach(x=>x.onclick=()=>go(x.dataset.id));
+  const nb=$('#nav button.on'); if(nb) nb.parentElement.scrollLeft=nb.offsetLeft-nb.parentElement.clientWidth/2+nb.offsetWidth/2;
+  const sb=$('#subnav button.on'); if(sb) sb.parentElement.scrollLeft=sb.offsetLeft-sb.parentElement.clientWidth/2+sb.offsetWidth/2;
+}
+function show(){
+  const id=cur();
+  secs.forEach(s=>s.classList.toggle('on',s.id===id));
+  const i=ids.indexOf(id);
+  $('#prev').style.visibility=i?'visible':'hidden';
+  $('#next').style.visibility=i<ids.length-1?'visible':'hidden';
+  $('#prev').textContent='← '+T('Anterior','Anterior');
+  if(i<ids.length-1) $('#next').textContent=st(secs[i+1])+' →';
+  markNav();
+}
+function go(id){ if(location.hash.slice(1)===id) return show(); location.hash=id; }
+window.addEventListener('hashchange',()=>{show();window.scrollTo(0,0)});
+$('#prev').onclick=()=>go(ids[Math.max(0,ids.indexOf(cur())-1)]);
+$('#next').onclick=()=>go(ids[Math.min(ids.length-1,ids.indexOf(cur())+1)]);
+
+const tileDesc={podcast:['Radio vs podcast, partes, proceso','Radio vs podcast, partes, proceso'],escaleta:['Editor, liña de tempo, modo emisión','Editor, línea de tiempo, modo emisión'],contido:['Formatos, ideas, roles, ficha','Formatos, ideas, roles, ficha'],mesa:['Partes, acendido e Show','Partes, encendido y Show'],micros:['Tipos, uso e ganancia','Tipos, uso y ganancia'],cascos:['Saídas, Listen e Mute','Salidas, Listen y Mute'],altavoces:['Monitor e auto-mute','Monitor y auto-mute'],grabar:['microSD e botón REC','microSD y botón REC'],archivos:['Onde quedan e como pasalos','Dónde quedan y cómo pasarlos'],pads:['Sintonías e efectos','Sintonías y efectos'],extra:['Chamadas e directo','Llamadas y directo'],sesion:['Checklist + mini-test','Checklist + mini-test'],problemas:['Se algo falla','Si algo falla']};
+function renderTiles(){
+  $('#tiles').innerHTML=blocks.slice(1).map(b=>`<div class="tgroup">${T(...b[1])}</div><div class="tiles">`+b[2].map(id=>`<button class="tile" data-id="${id}">${secDone(id)?'<span class="tk">✓</span>':''}<b>${st($('#'+id))}</b><span>${T(...tileDesc[id])}</span></button>`).join('')+'</div>').join('');
+  $$('.tile').forEach(t=>t.onclick=()=>go(t.dataset.id));
+}
+$$('.prueba').forEach((el,i)=>el.querySelectorAll('.pn').forEach(x=>x.textContent=i+1));
+function renderPruebas(){
+  $$('.prueba').forEach(el=>{
+    const p=el.dataset.p; let b=el.querySelector('button.btn');
+    if(!b){b=document.createElement('button');el.appendChild(b);b.onclick=()=>{pruebas[p]=!pruebas[p];store.set('pruebas',pruebas);refresh()}}
+    b.className='btn '+(pruebas[p]?'done':'pri'); b.textContent=pruebas[p]?T('✓ Proba feita','✓ Prueba hecha'):T('Marcar como feita','Marcar como hecha');
+  });
+  const n=Object.keys(pruebaSec).filter(p=>pruebas[p]).length;
+  $('#pbar').style.width=(n/nPr*100)+'%'; $('#ptxt').textContent=n+'/'+nPr+' '+T('probas','pruebas');
+}
+function refresh(){renderPruebas();renderNav();renderTiles();show()}
+rerenders.push(refresh);
+
+/* proceso */
+const procSteps=[['💡',['Idea','Idea'],['tema e público','tema y público'],'podcast'],['🗺️',['Escaleta','Escaleta'],['o mapa','el mapa'],'escaleta'],['✍️',['Contidos','Contenidos'],['guion e formato','guion y formato'],'contido'],['🎛️',['Gravar','Grabar'],['a mesa','la mesa'],'mesa'],['🎧',['Escoitar','Escuchar'],['revisar e compartir','revisar y compartir'],'archivos']];
+function renderProc(){
+  $('#proc').innerHTML=procSteps.map((p,i)=>`<button data-go="${p[3]}"><span class="ic">${p[0]}</span>${i+1}. ${T(...p[1])}<small>${T(...p[2])}</small></button>`).join('');
+  $$('#proc button').forEach(b=>b.onclick=()=>go(b.dataset.go));
+}
+rerenders.push(renderProc);
+
+
+let ticks=store.get('ticks',{});
+$$('ol.tick').forEach(ol=>{
+  const k=ol.dataset.k;
+  [...ol.children].forEach((li,i)=>{
+    if(ticks[k+i]) li.classList.add('done');
+    li.onclick=e=>{if(e.target.closest('a'))return;li.classList.toggle('done');ticks[k+i]=li.classList.contains('done');store.set('ticks',ticks)};
+  });
+});
+
+/* ---------- PARTES (numeración oficial RØDE) ---------- */
+const parts={
+ top:[
+  [['Pantalla táctil HD de 5,5"','Pantalla táctil HD de 5,5"'],['Medidores, axustes de cada canle, Shows e gravacións. Manéxase tocando e co codificador rotatorio.','Medidores, ajustes de cada canal, Shows y grabaciones. Se maneja tocando y con el codificador rotatorio.']],
+  [['Botón de gravación (REC)','Botón de grabación (REC)'],['Toca para gravar ou pausar; mantén premido para parar. A cor indica o estado (ver bloque Gravar).','Toca para grabar o pausar; mantén pulsado para parar. El color indica el estado (ver bloque Grabar).']],
+  [['Botóns de canle','Botones de canal'],['Un enriba de cada fader. Abre os axustes desa canle: tipo de micro, ganancia, phantom, procesado.','Uno encima de cada fader. Abre los ajustes de ese canal: tipo de micro, ganancia, phantom, procesado.']],
+  [['Faders das canles','Faders de los canales'],['6 faders físicos (e 3 virtuais na pantalla). Controlan canto sae de cada canle á mestura. A liña grosa é a «unidade».','6 faders físicos (y 3 virtuales en pantalla). Controlan cuánto sale de cada canal a la mezcla. La línea gruesa es la «unidad».']],
+  [['Botóns Listen e Mute','Botones Listen y Mute'],['Listen: escoitar só esa canle nos cascos. Mute: silenciala. Os dous á vez: Back Channel.','Listen: escuchar solo ese canal en los cascos. Mute: silenciarlo. Los dos a la vez: Back Channel.']],
+  [['Controis das saídas de cascos','Controles de las salidas de cascos'],['Un control de volume por cada unha das 4 saídas de cascos. Empeza sempre baixo.','Un control de volumen por cada una de las 4 salidas de cascos. Empieza siempre bajo.']],
+  [['Codificador rotatorio','Codificador rotatorio'],['O mando grande: volume dos altofalantes e mover valores na pantalla. Mantén 2 s para activar/desactivar os altofalantes.','El mando grande: volumen de los altavoces y mover valores en pantalla. Mantén 2 s para activar/desactivar los altavoces.']],
+  [['SMART pads','SMART pads'],['8 botóns para sintonías, sons, efectos de voz e accións da mesa.','8 botones para sintonías, sonidos, efectos de voz y acciones de la mesa.']],
+  [['Botóns de cambio de banco','Botones de cambio de banco'],['Cambian de páxina de pads: 8 bancos × 8 pads = 64 accións.','Cambian de página de pads: 8 bancos × 8 pads = 64 acciones.']]
+ ],
+ back:[
+  [['Botón de acendido','Botón de encendido'],['Vermello. Preme para acender; mantén uns segundos para apagar.','Rojo. Pulsa para encender; mantén unos segundos para apagar.']],
+  [['Ranura para tarxeta microSD','Ranura para tarjeta microSD'],['Aquí vai a tarxeta onde gravamos. Métea ata que faga clic, coa mesa apagada.','Aquí va la tarjeta donde grabamos. Métela hasta que haga clic, con la mesa apagada.']],
+  [['Entrada USB 1','Entrada USB 1'],['Ordenador principal: RØDECaster App, transferir gravacións, multipista por USB, emisión.','Ordenador principal: RØDECaster App, transferir grabaciones, multipista por USB, emisión.']],
+  [['Entrada USB 2','Entrada USB 2'],['Segundo dispositivo: móbil, outro ordenador ou un micro USB de RØDE.','Segundo dispositivo: móvil, otro ordenador o un micro USB de RØDE.']],
+  [['Saídas de liña balanceadas de 1/4"','Salidas de línea balanceadas de 1/4"'],['L e R, para os altofalantes con cables TRS. Tamén serven para mandar o sinal a outro equipo.','L y R, para los altavoces con cables TRS. También sirven para mandar la señal a otro equipo.']],
+  [['Porto USB de alimentación','Puerto USB de alimentación'],['Aquí vai a fonte de alimentación que trae a mesa.','Aquí va la fuente de alimentación que trae la mesa.']],
+  [['Porto Ethernet','Puerto Ethernet'],['Rede por cable, por exemplo para actualizar o firmware.','Red por cable, por ejemplo para actualizar el firmware.']],
+  [['Saídas de cascos de 1/4"','Salidas de cascos de 1/4"'],['4 saídas de jack grande (6,3 mm). Se os cascos son de jack pequeno, usa adaptador. Presentador/a na saída 1.','4 salidas de jack grande (6,3 mm). Si los cascos son de jack pequeño, usa adaptador. Presentador/a en la salida 1.']],
+  [['Entradas combo Neutrik XLR/TRS','Entradas combo Neutrik XLR/TRS'],['4 entradas: micrófonos (XLR) ou instrumentos/liña (jack). Entrada 1 → fader 1, etc.','4 entradas: micrófonos (XLR) o instrumentos/línea (jack). Entrada 1 → fader 1, etc.']]
+ ]};
+let view='top', openPart=-1;
+const G=(i,inner)=>`<g class="pt" data-i="${i}">${inner}</g>`;
+const B=(i,x,y,lx,ly)=>(lx!==undefined?`<line class="ld" data-i="${i}" x1="${x}" y1="${y}" x2="${lx}" y2="${ly}"/>`:'')+`<g class="bd" data-i="${i}"><circle cx="${x}" cy="${y}" r="13"/><text x="${x}" y="${y}">${i+1}</text></g>`;
+function topSVG(){
+  const chCol=['#ff4fd8','#38e05a','#3aa7ff','#ffc94a','#4a6bff','#ff5a5a'];
+  const padCol=['#ff6b6b','#ffa94d','#f5e14a','#5ee07a','#4fd8e8','#6b6bff','#a46bff','#ff6bc8'];
+  const xs=[72,124,176,228,280,332], caps=[330,300,340,410,345,425];
+  let s=`<svg viewBox="0 0 600 520" width="100%">
+  <rect x="18" y="18" width="564" height="484" rx="36" fill="#1b1c1e" stroke="#3a3c40" stroke-width="3"/>
+  <rect x="32" y="32" width="80" height="190" rx="14" fill="#232427"/>
+  <text x="72" y="70" fill="#ddd" font-size="17" font-weight="800" text-anchor="middle">RØDE</text>
+  <circle cx="72" cy="92" r="4" fill="#b98"/>
+  <rect x="380" y="32" width="190" height="190" rx="14" fill="#232427"/>`;
+  // 1 pantalla
+  let m=''; const hs=[70,95,80,40,85,60,30,25,20];
+  hs.forEach((h,i)=>{const x=150+i*17;m+=`<rect x="${x}" y="${190-h}" width="7" height="${h}" fill="#3c3"/><rect x="${x}" y="${190-h-10}" width="7" height="2" fill="#fff"/>`});
+  for(let r=0;r<4;r++)for(let c=0;c<2;c++)m+=`<rect x="${308+c*26}" y="${58+r*34}" width="22" height="28" rx="3" fill="#222"/>`;
+  s+=G(0,`<rect x="124" y="34" width="246" height="186" rx="12" fill="#2a2b2e"/><rect x="134" y="44" width="226" height="166" rx="6" fill="#050505"/><circle cx="150" cy="58" r="6" fill="#e22"/><text x="162" y="62" fill="#fff" font-size="11" font-weight="700">00:15:03</text>${m}`);
+  // 2 REC
+  s+=G(1,`<circle cx="72" cy="160" r="24" fill="#c11" stroke="#ff3b3b" stroke-width="5"/><text x="72" y="164" fill="#fff" font-size="10" font-weight="800" text-anchor="middle">REC</text>`);
+  // 6 cascos
+  const kc=['#ff4fd8','#38e05a','#3aa7ff','#ff9a3a'], kx=[408,456,504,552];
+  let k=''; kx.forEach((x,i)=>{k+=`<circle cx="${x}" cy="82" r="16" fill="#111" stroke="${kc[i]}" stroke-width="5"/><line x1="${x}" y1="82" x2="${x-7}" y2="72" stroke="#ddd" stroke-width="2"/><text class="lb" x="${x}" y="54">${i+1}</text>`});
+  s+=G(5,k+`<text class="lb" x="480" y="54">🎧</text>`);
+  // 7 codificador
+  s+=G(6,`<circle cx="420" cy="162" r="25" fill="#111" stroke="#3c3" stroke-width="6"/>`);
+  s+=`<text x="456" y="160" fill="#eee" font-size="11" font-weight="800">RØDECaster Pro II</text><text x="456" y="176" fill="#88a" font-size="8">APHEX</text>`;
+  // 3 botóns de canle, 4 faders, 5 listen/mute
+  let cb='',fd='',lm='';
+  xs.forEach((x,i)=>{
+    cb+=`<rect x="${x-12}" y="236" width="24" height="24" rx="3" fill="${chCol[i]}"/>`;
+    let t=''; for(let y=285;y<=445;y+=16) t+=`<rect x="${x-20}" y="${y}" width="7" height="2" fill="#888"/>`;
+    fd+=`<line x1="${x-26}" y1="232" x2="${x-26}" y2="482" stroke="#333" stroke-width="2"/>${t}<rect x="${x-2}" y="280" width="4" height="170" rx="2" fill="#000"/><rect x="${x-11}" y="${caps[i]}" width="22" height="34" rx="5" fill="#e6e6e6"/><rect x="${x-11}" y="${caps[i]+16}" width="22" height="2" fill="#333"/>`;
+    lm+=`<rect x="${x-21}" y="462" width="17" height="17" rx="3" fill="#2bbf4e"/><rect x="${x+4}" y="462" width="17" height="17" rx="3" fill="#e03b3b"/>`;
+  });
+  s+=G(3,fd)+G(2,cb)+G(4,lm);
+  // 8 pads, 9 bancos
+  let pd=`<rect x="386" y="232" width="174" height="256" rx="8" fill="none" stroke="#ddd" stroke-width="2"/>`;
+  padCol.forEach((c,i)=>{const r=Math.floor(i/2),cc=i%2;pd+=`<rect x="${398+cc*80}" y="${244+r*53}" width="70" height="45" rx="5" fill="${c}" opacity=".85"/>`});
+  s+=G(7,pd);
+  s+=G(8,`<rect x="410" y="462" width="40" height="17" rx="4" fill="#ddd"/><rect x="498" y="462" width="40" height="17" rx="4" fill="#ddd"/><text x="430" y="475" font-size="12" text-anchor="middle" fill="#222">‹</text><text x="518" y="475" font-size="12" text-anchor="middle" fill="#222">›</text>`);
+  s+=B(0,247,127)+B(1,72,206)+B(2,40,248)+B(3,40,370)+B(4,40,470)+B(5,480,112)+B(6,420,162)+B(7,473,335)+B(8,474,470);
+  return s+'</svg>';
+}
+function backSVG(){
+  let s=`<svg viewBox="0 0 640 262" width="100%">
+  <rect x="380" y="18" width="210" height="34" rx="4" fill="#26272a"/>
+  <rect x="10" y="48" width="620" height="160" rx="20" fill="#1b1c1e" stroke="#3a3c40" stroke-width="3"/>
+  <rect x="30" y="88" width="76" height="66" rx="8" fill="none" stroke="#ccc" stroke-width="2"/>
+  <rect x="48" y="168" width="18" height="8" rx="4" fill="#111" stroke="#666"/>
+  <rect x="114" y="88" width="140" height="72" rx="8" fill="#26272a"/>`;
+  s+=G(0,`<circle cx="55" cy="120" r="15" fill="#e22" stroke="#f66" stroke-width="2"/>`);
+  s+=G(5,`<rect x="84" y="104" width="11" height="32" rx="5" fill="#111" stroke="#ccc" stroke-width="2"/><text class="lb" x="66" y="148" font-size="7">15V 2A</text>`);
+  s+=G(1,`<rect x="124" y="98" width="40" height="6" rx="2" fill="#000" stroke="#aaa"/>`);
+  s+=G(6,`<rect x="124" y="116" width="32" height="28" rx="2" fill="#000" stroke="#aaa"/><rect x="130" y="120" width="20" height="5" fill="#666"/>`);
+  s+=G(2,`<rect x="172" y="114" width="30" height="11" rx="5" fill="#111" stroke="#ddd" stroke-width="2"/><circle cx="187" cy="143" r="8" fill="#eee"/><text x="187" y="147" font-size="10" font-weight="800" text-anchor="middle" fill="#111">1</text>`);
+  s+=G(3,`<rect x="214" y="114" width="30" height="11" rx="5" fill="#111" stroke="#ddd" stroke-width="2"/><text class="lb" x="229" y="147" font-size="12">2</text>`);
+  let ph=`<text class="lb" x="308" y="76" font-size="13">🎧</text>`;
+  [[288,108,'2'],[328,108,'1'],[288,162,'4'],[328,162,'3']].forEach(([x,y,l])=>{ph+=`<circle cx="${x}" cy="${y}" r="11" fill="#111" stroke="#aaa" stroke-width="2"/><circle cx="${x}" cy="${y}" r="4" fill="#000"/><text class="lb" x="${x}" y="${y<130?y-16:y+24}">${l}</text>`});
+  s+=G(7,`<line x1="266" y1="84" x2="266" y2="190" stroke="#ddd" stroke-width="2"/>`+ph);
+  let lo=`<line x1="398" y1="84" x2="398" y2="190" stroke="#ddd" stroke-width="2"/><line x1="352" y1="84" x2="352" y2="190" stroke="#ddd" stroke-width="2"/>`;
+  [[375,108,'1/L'],[375,162,'2/R']].forEach(([x,y,l])=>{lo+=`<circle cx="${x}" cy="${y}" r="11" fill="#111" stroke="#aaa" stroke-width="2"/><circle cx="${x}" cy="${y}" r="4" fill="#000"/><text class="lb" x="${x}" y="${y<130?y-16:y+24}">${l}</text>`});
+  s+=G(4,lo);
+  let cb=`<text class="lb" x="508" y="76" font-size="12">🎙️</text>`;
+  [[432,'4'],[486,'3'],[540,'2'],[594,'1']].forEach(([x,l])=>{cb+=`<circle cx="${x}" cy="130" r="23" fill="#0c0c0c" stroke="#bbb" stroke-width="3"/><circle cx="${x}" cy="130" r="9" fill="#2a2a2a" stroke="#666"/><circle cx="${x-6}" cy="124" r="2" fill="#000"/><circle cx="${x+6}" cy="124" r="2" fill="#000"/><circle cx="${x}" cy="138" r="2" fill="#000"/><text class="lb" x="${x}" y="172">${l}</text>`});
+  s+=G(8,cb);
+  s+=B(0,55,24,55,105)+B(1,144,24,144,98)+B(2,187,24,187,114)+B(3,229,24,229,114)+B(4,375,24,375,96)
+    +B(5,90,240,90,136)+B(6,140,240,140,144)+B(7,308,240,308,174)+B(8,513,240,513,153);
+  return s+'</svg>';
+}
+function renderDiag(){
+  $('#diag').innerHTML=view==='top'?topSVG():backSVG();
+  $$('#diag [data-i]').forEach(e=>{
+    e.classList.toggle('hl',+e.dataset.i===openPart);
+    e.addEventListener('click',()=>{openPart=+e.dataset.i;renderParts();beep(700,.06)});
+  });
+  const p=parts[view][openPart];
+  $('#pinfo').innerHTML=p?`<b>${openPart+1}. ${T(...p[0])}</b><br>${T(...p[1])}`:`<span style="color:var(--mut)">${T('Toca un número ou unha peza do debuxo…','Toca un número o una pieza del dibujo…')}</span>`;
+}
+function renderParts(){
+  renderDiag();
+  $('#parts').innerHTML=parts[view].map((p,i)=>`<button class="part${i===openPart?' open':''}" data-i="${i}"><span class="n">${i+1}</span><span><b>${T(...p[0])}</b><span class="d">${T(...p[1])}</span></span></button>`).join('');
+  $$('.part').forEach(b=>b.onclick=()=>{openPart=openPart===+b.dataset.i?-1:+b.dataset.i;renderParts()});
+}
+$$('#viewSeg button').forEach(b=>b.onclick=()=>{$$('#viewSeg button').forEach(x=>x.classList.toggle('on',x===b));view=b.dataset.v;openPart=-1;renderParts()});
+rerenders.push(renderParts);
+
+/* ---------- MIC SIM ---------- */
+const H=220, dbMin=-60;
+const dbToPx=db=>Math.max(0,Math.min(1,(db-dbMin)/(-dbMin)))*H;
+$('#zone').style.bottom=dbToPx(-6)+'px'; $('#zone').style.height=(dbToPx(-3)-dbToPx(-6))+'px';
+$('#unity').style.bottom=(0.70*H)+'px';
+let talking=false, holdOn=false, peakIn=-99, peakHoldT=0, phase=0, fbTimer=0;
+const talkBtn=$('#talk');
+talkBtn.addEventListener('pointerdown',e=>{e.preventDefault();talking=true});
+['pointerup','pointerleave','pointercancel'].forEach(ev=>talkBtn.addEventListener(ev,()=>talking=false));
+talkBtn.addEventListener('contextmenu',e=>e.preventDefault());
+$('#hold').onclick=()=>{holdOn=!holdOn;$('#hold').classList.toggle('on',holdOn)};
+$('#gain').oninput=e=>$('#gv').textContent=e.target.value;
+const faderDb=v=>v<=0?-99:(v-70)*0.6;
+function micIdle(){ if(!(talking||holdOn)){$('#mfb').textContent=T('Agardando voz…','Esperando voz…');$('#mfb').style.background='var(--panel2)'} }
+rerenders.push(micIdle);
+function micTick(){
+  const g=+$('#gain').value, fv=+$('#fader').value, on=talking||holdOn;
+  let lvl;
+  if(on){phase+=0.35;const env=0.6+0.4*Math.abs(Math.sin(phase))*Math.random();lvl=-56+g*0.9+(env-1)*14}
+  else lvl=-75+g*0.3+Math.random()*2;
+  lvl=Math.min(0,lvl);
+  const out=fv<=0?-99:Math.min(0,lvl+faderDb(fv));
+  $('#mIn i').style.height=dbToPx(lvl)+'px'; $('#mOut i').style.height=dbToPx(out)+'px';
+  if(lvl>peakIn||Date.now()-peakHoldT>1200){peakIn=lvl;peakHoldT=Date.now()}
+  $('#mIn .pk').style.bottom=dbToPx(peakIn)+'px';
+  if(on){
+    $('#peakTxt').textContent=T('pico ','pico ')+peakIn.toFixed(0)+' dB';
+    if(++fbTimer%6===0){
+      let t,c;
+      if(peakIn>-1.5){t=T('🔴 Ao vermello! Baixa a ganancia','🔴 ¡Al rojo! Baja la ganancia');c='#3b1717'}
+      else if(peakIn>=-6.5){t=T('✅ Perfecto: picos entre −6 e −3','✅ Perfecto: picos entre −6 y −3');c='#173b25'}
+      else if(peakIn>=-15){t=T('🟡 Un pouco baixo: sobe algo a ganancia','🟡 Un poco bajo: sube algo la ganancia');c='#3a3016'}
+      else{t=T('⚪ Moi baixo: sobe a ganancia','⚪ Muy bajo: sube la ganancia');c='var(--panel2)'}
+      if(fv<=0) t+=T(' · Fader abaixo: non sae nada',' · Fader abajo: no sale nada');
+      else if(fv<62) t+=T(' · Fader por debaixo da unidade',' · Fader por debajo de la unidad');
+      else if(fv>78) t+=T(' · Fader por riba da unidade',' · Fader por encima de la unidad');
+      else t+=T(' · Fader na unidade 👍',' · Fader en la unidad 👍');
+      $('#mfb').textContent=t;$('#mfb').style.background=c;
+    }
+  } else if(fbTimer){fbTimer=0;micIdle()}
+  requestAnimationFrame(micTick);
+}
+requestAnimationFrame(micTick);
+
+/* ---------- MONITOR SIM ---------- */
+let mon={auto:true,mic:false,off:false};
+function renderMon(){
+  let col,txt;
+  if(mon.off){col='var(--red)';txt=T('Vermello con cruz: altofalantes desactivados','Rojo con cruz: altavoces desactivados')}
+  else if(mon.auto&&mon.mic){col='var(--amber)';txt=T('Ámbar: calados porque hai un micro aberto','Ámbar: silenciados porque hay un micro abierto')}
+  else{col='var(--green)';txt=mon.mic?T('Verde con micro aberto: coidado co acople!','Verde con micro abierto: ¡cuidado con el acople!'):T('Verde: soa polos altofalantes','Verde: suena por los altavoces')}
+  $('#mon').style.borderColor=col; $('#mon').classList.toggle('x',mon.off);
+  $('#monTxt').textContent=txt; $('#monTxt').style.background=mon.mic&&!mon.auto&&!mon.off?'#3b1717':'var(--panel2)';
+  $('#tAuto').classList.toggle('on',mon.auto); $('#tMic').classList.toggle('on',mon.mic);
+}
+rerenders.push(renderMon);
+$('#tAuto').onclick=()=>{mon.auto=!mon.auto;renderMon()};
+$('#tMic').onclick=()=>{mon.mic=!mon.mic;renderMon()};
+let dialT; const dial=$('#dial');
+dial.addEventListener('pointerdown',e=>{e.preventDefault();dial.style.borderColor='var(--accent)';dialT=setTimeout(()=>{mon.off=!mon.off;renderMon();dial.style.borderColor='#444'},2000)});
+['pointerup','pointerleave','pointercancel'].forEach(ev=>dial.addEventListener(ev,()=>{clearTimeout(dialT);dial.style.borderColor='#444'}));
+$('#padSnd').onclick=()=>{
+  const ok=!mon.off&&!(mon.auto&&mon.mic);
+  $('#monTxt').textContent=ok?T('🔊 O son sae polos altofalantes!','🔊 ¡El sonido sale por los altavoces!'):T('🔇 Polos altofalantes non soa (si polos cascos e na gravación)','🔇 Por los altavoces no suena (sí por cascos y en la grabación)');
+  beep(ok?660:220,.25); setTimeout(renderMon,1800);
+};
+let actx;
+function beep(f,d){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=f;o.type='triangle';g.gain.setValueAtTime(.15,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d);o.connect(g).connect(actx.destination);o.start();o.stop(actx.currentTime+d)}catch(e){}}
+
+/* ---------- REC SIM ---------- */
+let rec={card:true,state:'ready',secs:0,iv:null,msg:null};
+let recordings=[{n:1,len:'12:40'},{n:2,len:'08:05'}];
+const recBtn=$('#rec');
+const recCols={ready:'#1c8a4c',rec:'#e02b2b',pause:'#e09a10',nocard:'#2b6fe0'};
+const recMsg={ready:['Verde: lista para gravar. Toca para empezar.','Verde: lista para grabar. Toca para empezar.'],rec:['Vermello: gravando. Toca para pausar · Mantén para parar.','Rojo: grabando. Toca para pausar · Mantén para parar.'],pause:['Ámbar: en pausa. Toca para seguir · Mantén para parar.','Ámbar: en pausa. Toca para seguir · Mantén para parar.'],nocard:['Azul: non hai tarxeta. Métea para poder gravar.','Azul: no hay tarjeta. Métela para poder grabar.']};
+const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function renderRec(){
+  const s=rec.card?rec.state:'nocard';
+  recBtn.style.background=recCols[s]; recBtn.style.boxShadow=s==='rec'?'0 0 30px #e02b2b88':'none';
+  $('#recTxt').textContent=rec.msg?T(...rec.msg):T(...recMsg[s]);
+  $('#timer').textContent=fmt(rec.secs); $('#tCard').classList.toggle('on',rec.card);
+}
+rerenders.push(renderRec);
+let pressT,longDone=false;
+recBtn.addEventListener('pointerdown',e=>{e.preventDefault();longDone=false;
+  if(rec.card&&(rec.state==='rec'||rec.state==='pause')) pressT=setTimeout(()=>{longDone=true;stopRec()},800)});
+recBtn.addEventListener('pointerup',()=>{clearTimeout(pressT); if(longDone) return; rec.msg=null;
+  if(!rec.card){beep(200,.2);return}
+  if(rec.state==='ready'){rec.state='rec';rec.secs=0;startIv();beep(880,.12)}
+  else if(rec.state==='rec'){rec.state='pause';clearInterval(rec.iv)}
+  else {rec.state='rec';startIv()}
+  renderRec()});
+recBtn.addEventListener('pointerleave',()=>clearTimeout(pressT));
+recBtn.addEventListener('contextmenu',e=>e.preventDefault());
+function startIv(){clearInterval(rec.iv);rec.iv=setInterval(()=>{rec.secs++;renderRec()},1000)}
+function stopRec(){clearInterval(rec.iv);
+  recordings.push({n:recordings.length+1,len:fmt(rec.secs),nueva:true});
+  rec.state='ready'; const n=recordings.length;
+  rec.msg=[`⏹ Parada. Gravación nº ${n} gardada na tarxeta (mira «Ficheiros»).`,`⏹ Parada. Grabación nº ${n} guardada en la tarjeta (mira «Archivos»).`];
+  beep(440,.2); open['s'+n]=true; renderRec(); renderTree();
+}
+$('#tCard').onclick=()=>{ if(rec.state!=='ready'&&rec.card) stopRec(); rec.card=!rec.card; rec.msg=null; renderRec()};
+
+/* ---------- TREE ---------- */
+let open={root:true,s2:true};
+function renderTree(){
+  let h=`<div data-o="root" class="f">${open.root?'📂':'📁'} RODECaster</div>`;
+  if(open.root){
+    h+='<div class="ind">';
+    [...recordings].reverse().forEach(x=>{
+      const k='s'+x.n;
+      h+=`<div data-o="${k}" class="f">${open[k]?'📂':'📁'} ${String(x.n).padStart(3,'0')} <span style="color:var(--mut)">· ${x.len}${x.nueva?T(' · nova!',' · ¡nueva!'):''}</span></div>`;
+      if(open[k]) h+=`<div class="ind"><div class="w">🎵 Stereo Mix.wav</div><div class="w">🎵 Track1-Mic 1.wav</div><div class="w">🎵 Track2-Mic 2.wav</div><div class="w">🎵 Track3-Mic 3.wav</div><div class="w">🎵 Track4-Mic 4.wav</div></div>`;
+    });
+    h+='</div>';
+  }
+  $('#tree').innerHTML=h+`<p style="margin:8px 0 0;font-family:Inter;font-size:13px;color:var(--mut)">${T('O número máis alto é a sesión máis recente. «Stereo Mix» é a mestura; as «Track» son unha por micro (se gravas en multipista).','El número más alto es la sesión más reciente. «Stereo Mix» es la mezcla; las «Track» son una por micro (si grabas en multipista).')}</p>`;
+  $$('#tree [data-o]').forEach(d=>d.onclick=()=>{open[d.dataset.o]=!open[d.dataset.o];renderTree()});
+}
+rerenders.push(renderTree);
+
+/* ---------- PADS ---------- */
+const bank1=[
+  ['🎵',['Sintonía','Sintonía'],'Sound',['Lanza a sintonía do podcast. Cárgaa desde a RØDECaster App (MP3 ou WAV).','Lanza la sintonía del podcast. Cárgala desde la RØDECaster App (MP3 o WAV).'],523],
+  ['👏',['Aplausos','Aplausos'],'Sound',['Efecto de aplausos para peches ou momentos especiais.','Efecto de aplausos para cierres o momentos especiales.'],392],
+  ['😂',['Risos','Risas'],'Sound',['Risos enlatados. Con moderación 😉','Risas enlatadas. Con moderación 😉'],440],
+  ['📣',['Ráfaga','Ráfaga'],'Sound',['Cortiña curta para separar seccións.','Cortinilla corta para separar secciones.'],659],
+  ['🌫️',['Reverb','Reverb'],'Effects',['Engade reverberación ao micro que escollas. Con «Latching», un toque acende e outro apaga.','Añade reverberación al micro que elijas. Con «Latching», un toque enciende y otro apaga.'],300],
+  ['🤖',['Robot','Robot'],'Effects',['Efecto de voz robot. Perfecto para personaxes.','Efecto de voz robot. Perfecto para personajes.'],180],
+  ['📢',['Megáfono','Megáfono'],'Effects',['Voz de megáfono.','Voz de megáfono.'],800],
+  ['🔁',['Eco','Eco'],'Effects',['Eco (delay) sobre o micro escollido.','Eco (delay) sobre el micro elegido.'],350]
+];
+let bank=1, padSel=null;
+function renderPads(){
+  $('#bank').textContent=T('Banco ','Banco ')+bank;
+  const data=bank===1?bank1:Array(8).fill(null);
+  $('#padGrid').innerHTML=data.map((p,i)=>p?`<button class="pad" data-i="${i}" style="border-color:${p[2]==='Sound'?'#3d8bff':'#b07cff'}"><span class="ic">${p[0]}</span>${T(...p[1])}</button>`:`<button class="pad" data-i="${i}" style="opacity:.5"><span class="ic">＋</span>${T('baleiro','vacío')}</button>`).join('');
+  const showSel=()=>{
+    if(padSel===null){$('#padTxt').textContent=T('Toca un pad','Toca un pad');return}
+    const p=data[padSel];
+    $('#padTxt').innerHTML=p?`<span class="kbd">${p[2]}</span> <b>${T(...p[1])}</b> — ${T(...p[3])}`:T('Pad baleiro: tócao na pantalla para asignarlle son, efecto ou acción.','Pad vacío: tócalo en la pantalla para asignarle sonido, efecto o acción.');
+  };
+  showSel();
+  $$('.pad').forEach(b=>b.onclick=()=>{b.classList.add('hit');setTimeout(()=>b.classList.remove('hit'),150);padSel=+b.dataset.i;showSel();const p=data[padSel];if(p)beep(p[4],.3)});
+}
+$('#bPrev').onclick=()=>{bank=bank>1?bank-1:8;padSel=null;renderPads()};
+$('#bNext').onclick=()=>{bank=bank<8?bank+1:1;padSel=null;renderPads()};
+rerenders.push(renderPads);
+
+/* ---------- CHECKLIST ---------- */
+const chkItems=[
+ [['Antes','Antes'],[['Mesa acendida e Show «Obradoiro podcast» cargado','Mesa encendida y Show «Taller podcast» cargado'],['Tarxeta dentro e con espazo (REC en verde, non azul)','Tarjeta dentro y con espacio (REC en verde, no azul)'],['Faders abaixo antes de conectar micros','Faders abajo antes de enchufar micros'],['Cascos co volume baixo','Cascos con el volumen bajo'],['Proba de son de cada micro','Prueba de sonido de cada micro'],['Multipista activada','Multipista activada'],['Escaleta lista e modo emisión aberto','Escaleta lista y modo emisión abierto']]],
+ [['Durante','Durante'],[['REC unha vez para empezar; manter para parar','REC una vez para empezar; mantener para parar'],['Vixiar que ninguén chegue ao vermello','Vigilar que nadie llegue al rojo'],['Mute para tuses e comentarios','Mute para toses y comentarios']]],
+ [['Despois','Después'],[['Escoitar uns segundos na mesa','Escuchar unos segundos en la mesa'],['Apagar, sacar a tarxeta e copiar os ficheiros','Apagar, sacar la tarjeta y copiar los archivos'],['Renomear con data e grupo','Renombrar con fecha y grupo'],['Devolver a tarxeta á mesa','Devolver la tarjeta a la mesa']]]
+];
+let chk=store.get('chk',{});
+function renderChk(){
+  let h='';
+  chkItems.forEach(([g,items],gi)=>{
+    h+=`<h3 style="margin:10px 0 2px">${T(...g)}</h3>`;
+    items.forEach((t,i)=>{const k=gi+'_'+i;h+=`<label><input type="checkbox" data-k="${k}" ${chk[k]?'checked':''}><span>${T(...t)}</span></label>`});
+  });
+  $('#chk').innerHTML=h;
+  $$('#chk input').forEach(c=>c.onchange=()=>{chk[c.dataset.k]=c.checked;store.set('chk',chk)});
+}
+$('#chkReset').onclick=()=>{chk={};store.set('chk',chk);renderChk()};
+rerenders.push(renderChk);
+
+/* ---------- QUIZ ---------- */
+const quiz=[
+  [['Que micro precisa phantom (48 V)?','¿Qué micro necesita phantom (48 V)?'],[['O dinámico','El dinámico'],['O de condensador','El de condensador'],['Ningún','Ninguno']],1,['O de condensador precisa phantom; o dinámico non.','El de condensador necesita phantom; el dinámico no.']],
+  [['Que di a escaleta?','¿Qué dice la escaleta?'],[['O texto exacto que se le','El texto exacto que se lee'],['Que pasa, en que orde, canto dura e que se toca','Qué pasa, en qué orden, cuánto dura y qué se toca'],['A lista de convidados','La lista de invitados']],1,['O texto é o guion; a escaleta é o mapa do programa.','El texto es el guion; la escaleta es el mapa del programa.']],
+  [['O botón REC está azul. Que pasa?','El botón REC está azul. ¿Qué pasa?'],[['Está gravando','Está grabando'],['Non hai tarxeta ou non pode gravar','No hay tarjeta o no puede grabar'],['Está en pausa','Está en pausa']],1,['Azul = sen tarxeta ou non pode gravar. Verde lista, vermello gravando, ámbar pausa.','Azul = sin tarjeta o no puede grabar. Verde lista, rojo grabando, ámbar pausa.']],
+  [['Como se PARA unha gravación?','¿Cómo se PARA una grabación?'],[['Tocando REC unha vez','Tocando REC una vez'],['Mantendo premido REC ata que se pon verde','Manteniendo pulsado REC hasta que se pone verde'],['Apagando a mesa','Apagando la mesa']],1,['Un toque pausa; manter premido para.','Un toque pausa; mantener pulsado para.']],
+  [['Unha voz chega ao vermello. Que tocas?','Una voz llega al rojo. ¿Qué tocas?'],[['A ganancia da canle','La ganancia del canal'],['O volume dos cascos','El volumen de los cascos'],['O fader doutra canle','El fader de otro canal']],0,['A ganancia controla o que entra. O fader e os cascos non arranxan a distorsión de entrada.','La ganancia controla lo que entra. El fader y los cascos no arreglan la distorsión de entrada.']],
+  [['Onde está a «unidade» do fader?','¿Dónde está la «unidad» del fader?'],[['Abaixo de todo','Abajo del todo'],['Na liña grosa, algo por riba da metade','En la línea gruesa, algo por encima de la mitad'],['Arriba de todo','Arriba del todo']],1,['Na liña grosa o son sae tal como entra.','En la línea gruesa el sonido sale tal como entra.']],
+  [['Os altofalantes cálanse ao subir un micro. Por que?','Los altavoces se callan al subir un micro. ¿Por qué?'],[['Está estragada','Está estropeada'],['Auto-mute, para evitar o acople','Auto-mute, para evitar el acople'],['Acabouse a tarxeta','Se acabó la tarjeta']],1,['O auto-mute cala os altofalantes cun micro aberto (anel ámbar).','El auto-mute silencia los altavoces con un micro abierto (anillo ámbar).']],
+  [['Que formatos acepta un SMART pad?','¿Qué formatos acepta un SMART pad?'],[['MP3 ou WAV','MP3 o WAV'],['Só MP4','Solo MP4'],['Calquera','Cualquiera']],0,['Só MP3 ou WAV, cargados coa RØDECaster App.','Solo MP3 o WAV, cargados con la RØDECaster App.']]
+];
+let qAns={};
+function renderQuiz(){
+  $('#quiz').innerHTML=quiz.map((q,i)=>`<div class="q card"><b>${i+1}. ${T(...q[0])}</b><div class="opts">${q[1].map((o,j)=>`<button data-q="${i}" data-j="${j}">${T(...o)}</button>`).join('')}</div><div class="ex" id="ex${i}"></div></div>`).join('')+'<div class="read" id="qscore"></div>';
+  const paint=i=>{const j=qAns[i].last,q=quiz[i];
+    $$(`.q .opts button[data-q="${i}"]`).forEach(x=>{x.classList.remove('ok','ko');if(+x.dataset.j===q[2])x.classList.add('ok');if(+x.dataset.j===j&&j!==q[2])x.classList.add('ko')});
+    $('#ex'+i).textContent=(j===q[2]?'✅ ':'❌ ')+T(...q[3]);
+    if(Object.keys(qAns).length===quiz.length) $('#qscore').textContent=T('Resultado: ','Resultado: ')+Object.values(qAns).filter(a=>a.first).length+'/'+quiz.length;
+  };
+  Object.keys(qAns).forEach(i=>paint(+i));
+  $$('.q .opts button').forEach(b=>b.onclick=()=>{const i=+b.dataset.q,j=+b.dataset.j;
+    if(!qAns[i]) qAns[i]={first:j===quiz[i][2]}; qAns[i].last=j; paint(i)});
+}
+rerenders.push(renderQuiz);
+
+/* ---------- PROBLEMAS ---------- */
+const probs=[
+  [['REC en azul','REC en azul'],['Non hai tarxeta, está mal metida ou hai que formatala (borra todo!).','No hay tarjeta, está mal metida o hay que formatearla (¡borra todo!).']],
+  [['Non se oe un micro','No se oye un micro'],['Cable ben conectado, fader subido, Mute apagado, ganancia da canle, phantom se é de condensador.','Cable bien enchufado, fader subido, Mute apagado, ganancia del canal, phantom si es de condensador.']],
+  [['Soa moi baixo','Suena muy bajo'],['Sobe a ganancia da canle ou achégate ao micro (non só o fader).','Sube la ganancia del canal o acércate al micro (no solo el fader).']],
+  [['Distorsiona / chega ao vermello','Distorsiona / llega al rojo'],['Baixa a ganancia ata que os picos queden entre −6 e −3.','Baja la ganancia hasta que los picos queden entre −6 y −3.']],
+  [['Asubío (acople)','Pitido (acople)'],['Baixa os altofalantes e deixa o auto-mute activado.','Baja los altavoces y deja el auto-mute activado.']],
+  [['Non oio nada nos cascos','No oigo nada en los cascos'],['Control de volume desa saída. Está aberta a pantalla de reprodución? Silencia todo o demais.','Control de volumen de esa salida. ¿Está abierta la pantalla de reproducción? Silencia todo lo demás.']],
+  [['Cortes na gravación','Cortes en la grabación'],['Tarxeta lenta ou sen marca: cámbiaa por unha de polo menos 100 MB/s.','Tarjeta lenta o sin marca: cámbiala por una de al menos 100 MB/s.']],
+  [['A mesa non fai son co ordenador conectado','La mesa no hace sonido con el ordenador conectado'],['Pode estar en modo transferencia (RØDECaster App): mentres transfire non fai son.','Puede estar en modo transferencia (RØDECaster App): mientras transfiere no hace audio.']],
+  [['Alguén desconfigurou todo','Alguien desconfiguró todo'],['Carga de novo o Show do obradoiro.','Carga de nuevo el Show del taller.']]
+];
+function renderProbs(){$('#probs').innerHTML=probs.map(p=>`<details><summary>${T(...p[0])}</summary><div>${T(...p[1])}</div></details>`).join('')}
+rerenders.push(renderProbs);
+
+/* ---------- DISTANCIA MICRO ---------- */
+let mtype='din';
+$$('#mtSeg button').forEach(b=>b.onclick=()=>{$$('#mtSeg button').forEach(x=>x.classList.toggle('on',x===b));mtype=b.dataset.t;$('#dist').value=mtype==='din'?8:18;renderDist()});
+$('#dist').oninput=renderDist;
+function renderDist(){
+  const d=+$('#dist').value; $('#dv').textContent=d;
+  $('#dgap').style.width=(d/40*100)+'%';
+  const voz=Math.max(5,Math.min(100,110-60*Math.log10(d/3)));
+  const sala=Math.min(100,mtype==='din'?8+d*0.8:22+d*1.5);
+  $('#bVoz').style.width=voz+'%'; $('#bSala').style.width=sala+'%';
+  const [lo,hi]=mtype==='din'?[5,10]:[12,22];
+  let t,c;
+  if(d<lo){t=T('😬 Demasiado preto: estouran os «p» e a voz soa inchada de graves.','😬 Demasiado cerca: explotan las «p» y la voz suena hinchada de graves.');c='#3a3016'}
+  else if(d<=hi){t=T('✅ Distancia boa: voz clara e pouca sala.','✅ Distancia buena: voz clara y poca sala.');c='#173b25'}
+  else if(d<=hi*1.8){t=T('🟡 Algo lonxe: a voz perde presenza e entra máis sala.','🟡 Algo lejos: la voz pierde presencia y entra más sala.');c='#3a3016'}
+  else{t=T('🔴 Moi lonxe: soa a «lata», con eco e ruído.','🔴 Muy lejos: suena a «lata», con eco y ruido.');c='#3b1717'}
+  $('#dfb').textContent=t; $('#dfb').style.background=c;
+}
+rerenders.push(renderDist);
+
+/* ---------- FORMATOS ---------- */
+const fmts=[
+ ['🗣️',['Monólogo / crónica','Monólogo / crónica'],['Unha persoa conta algo: unha opinión, unha historia, unha crónica dun evento.','Una persona cuenta algo: una opinión, una historia, una crónica de un evento.'],['1 voz · fácil','1 voz · fácil'],['Unha crónica do último concerto do centro.','Una crónica del último concierto del centro.']],
+ ['🎙️',['Entrevista','Entrevista'],['Unha persoa pregunta e outra responde. Prepara 5-6 preguntas abertas (non de si/non) e escoita para repreguntar.','Una persona pregunta y otra responde. Prepara 5-6 preguntas abiertas (no de sí/no) y escucha para repreguntar.'],['2 voces · media','2 voces · media'],['Entrevista ao conserxe: o que ninguén sabe do centro.','Entrevista al conserje: lo que nadie sabe del centro.']],
+ ['💬',['Tertulia / debate','Tertulia / debate'],['Varias persoas comentan un tema. Fai falta quen modere e repartir quendas.','Varias personas comentan un tema. Hace falta quien modere y repartir turnos.'],['3-4 voces · media','3-4 voces · media'],['Debate: deberes si ou non?','Debate: ¿deberes sí o no?']],
+ ['🧭',['Reportaxe','Reportaje'],['Investigas un tema con voces e sons gravados fóra: testemuños, ambientes, datos.','Investigas un tema con voces y sonidos grabados fuera: testimonios, ambientes, datos.'],['varias · difícil','varias · difícil'],['Como soa o noso barrio ás 8 da mañá?','¿Cómo suena nuestro barrio a las 8 de la mañana?']],
+ ['🎭',['Ficción sonora','Ficción sonora'],['Radioteatro: personaxes, diálogos, efectos e música. Moi creativo.','Radioteatro: personajes, diálogos, efectos y música. Muy creativo.'],['varias · difícil','varias · difícil'],['Un misterio na biblioteca, con efectos dos pads.','Un misterio en la biblioteca, con efectos de los pads.']],
+ ['📻',['Magazine','Magazine'],['Un programa con varias seccións curtas: noticias, axenda, entrevista, recomendacións.','Un programa con varias secciones cortas: noticias, agenda, entrevista, recomendaciones.'],['3-5 voces · media','3-5 voces · media'],['«Onda Centro»: novas, axenda e a canción da semana.','«Onda Centro»: noticias, agenda y la canción de la semana.']]
+];
+let fmtSel=0;
+function renderFmts(){
+  $('#fmts').innerHTML=fmts.map((f,i)=>`<button class="fmt${i===fmtSel?' on':''}" data-i="${i}"><span class="ic">${f[0]}</span>${T(...f[1])}</button>`).join('');
+  $$('.fmt').forEach(b=>b.onclick=()=>{fmtSel=+b.dataset.i;renderFmts()});
+  const f=fmts[fmtSel];
+  $('#fmtInfo').innerHTML=`<b>${f[0]} ${T(...f[1])}</b> <span class="kbd">${T(...f[3])}</span><p style="margin:6px 0">${T(...f[2])}</p><span style="color:var(--mut)">${T('Exemplo','Ejemplo')}: ${T(...f[4])}</span>`;
+}
+rerenders.push(renderFmts);
+
+/* ---------- XERADOR DE IDEAS ---------- */
+const iF=[['Unha entrevista','Una entrevista'],['Un debate','Un debate'],['Unha reportaxe','Un reportaje'],['Unha ficción sonora','Una ficción sonora'],['Un magazine','Un magazine'],['Unha crónica','Una crónica']];
+const iT=[['sobre a música que escoitamos na casa','sobre la música que escuchamos en casa'],['sobre un oficio que ninguén coñece','sobre un oficio que nadie conoce'],['sobre o primeiro día no centro','sobre el primer día en el centro'],['sobre un instrumento raro','sobre un instrumento raro'],['sobre as lendas do noso barrio','sobre las leyendas de nuestro barrio'],['sobre o mellor bocadillo do recreo','sobre el mejor bocadillo del recreo'],['sobre como era o centro hai 30 anos','sobre cómo era el centro hace 30 años'],['sobre un libro da biblioteca','sobre un libro de la biblioteca'],['sobre os nervios antes dunha audición','sobre los nervios antes de una audición'],['sobre a cidade dentro de 50 anos','sobre la ciudad dentro de 50 años']];
+const iX=[['en 5 minutos','en 5 minutos'],['con 3 efectos dos pads','con 3 efectos de los pads'],['contado por un obxecto','contado por un objeto'],['cunha persoa maior convidada','con una persona mayor invitada'],['sen dicir nunca «eh»','sin decir nunca «eh»'],['con sintonía feita por vós','con sintonía hecha por vosotros']];
+let idea=null;
+const pick=a=>Math.floor(Math.random()*a.length);
+function renderIdea(){ $('#idea').textContent=idea?`${T(...iF[idea[0]])} ${T(...iT[idea[1]])}, ${T(...iX[idea[2]])}.`:T('Preme o botón…','Pulsa el botón…') }
+$('#ideaBtn').onclick=()=>{idea=[pick(iF),pick(iT),pick(iX)];renderIdea();beep(600+Math.random()*300,.1)};
+rerenders.push(renderIdea);
+
+/* ---------- FICHA ---------- */
+let ficha=store.get('ficha',{});
+const fichaF=[['nome',['Nome do podcast','Nombre del podcast']],['tema',['Tema nunha frase','Tema en una frase']],['pub',['Público','Público']],['fmt',['Formato','Formato'],'sel'],['dur',['Duración','Duración']],['pres',['Presentación','Presentación']],['tec',['Técnica (mesa)','Técnica (mesa)']],['gui',['Guion','Guion']],['prod',['Produción (tempo)','Producción (tiempo)']]];
+function renderFicha(){
+  $('#ficha').innerHTML=fichaF.map(([k,l,t])=>`<label><span class="l">${T(...l)}</span>${t==='sel'?`<select data-k="${k}"><option value=""></option>${fmts.map((f,i)=>`<option value="${i}" ${ficha[k]==String(i)?'selected':''}>${T(...f[1])}</option>`).join('')}</select>`:`<input data-k="${k}" value="${(ficha[k]||'').replace(/"/g,'&quot;')}">`}</label>`).join('');
+  $$('#ficha [data-k]').forEach(e=>e.oninput=e.onchange=()=>{ficha[e.dataset.k]=e.value;store.set('ficha',ficha)});
+}
+$('#fichaCopy').onclick=async()=>{
+  const txt=fichaF.map(([k,l,t])=>`${T(...l)}: ${t==='sel'?(ficha[k]!==undefined&&ficha[k]!==''?T(...fmts[+ficha[k]][1]):''):(ficha[k]||'')}`).join('\n');
+  try{await navigator.clipboard.writeText(txt);$('#fichaMsg').textContent=T('Copiada ✓','Copiada ✓')}catch(e){$('#fichaMsg').textContent=T('Non se puido copiar','No se pudo copiar')}
+};
+rerenders.push(renderFicha);
+
+/* ---------- ESCALETA ---------- */
+const eTypes={
+ sint:['🎵',['Sintonía','Sintonía'],'#a46bff'],
+ saudo:['👋',['Saúdo','Saludo'],'#33d17a'],
+ secc:['🗂️',['Sección','Sección'],'#3d8bff'],
+ entre:['🎙️',['Entrevista','Entrevista'],'#ff9a3a'],
+ rafaga:['📣',['Ráfaga','Ráfaga'],'#ff6bc8'],
+ debate:['💬',['Debate','Debate'],'#4fd8e8'],
+ cuna:['📻',['Cuña','Cuña'],'#f5e14a'],
+ desp:['🙋',['Despedida','Despedida'],'#33d17a'],
+ libre:['✏️',['Outro','Otro'],'#9aa0a6']
+};
+const tpls={
+ mag:[['sint','Sintonía','',20,'Pad 1'],['saudo','Presentación do programa','Presentación',60,'Fader 1 arriba'],['secc','Novas do centro','Presentación',150,''],['rafaga','Ráfaga','',10,'Pad 4'],['secc','Axenda da semana','Voz 2',120,'Fader 2'],['rafaga','Ráfaga','',10,'Pad 4'],['entre','Entrevista','Presentación + convidado/a',180,'Faders 1 e 3'],['desp','Despedida e créditos','Presentación',40,''],['sint','Sintonía final','',20,'Pad 1']],
+ ent:[['sint','Sintonía','',15,'Pad 1'],['saudo','Presentación do convidado/a','Presentación',60,'Fader 1'],['entre','Preguntas 1-3','Presentación + convidado/a',180,'Faders 1 e 2'],['rafaga','Ráfaga','',10,'Pad 4'],['entre','Preguntas 4-6','Presentación + convidado/a',180,''],['desp','Despedida','Presentación',30,''],['sint','Sintonía final','',15,'Pad 1']]
+};
+const tplEs={'Presentación do programa':'Presentación del programa','Novas do centro':'Noticias del centro','Axenda da semana':'Agenda de la semana','Presentación + convidado/a':'Presentación + invitado/a','Despedida e créditos':'Despedida y créditos','Sintonía final':'Sintonía final','Presentación do convidado/a':'Presentación del invitado/a','Faders 1 e 3':'Faders 1 y 3','Faders 1 e 2':'Faders 1 y 2'};
+let esc=store.get('esc',null)||{target:10,rows:tpls.mag.map(r=>({t:r[0],title:r[1],who:r[2],dur:r[3],tech:r[4]}))};
+const saveEsc=()=>store.set('esc',esc);
+const mmss=s=>Math.floor(s/60)+':'+String(Math.abs(s)%60).padStart(2,'0');
+const parseDur=v=>{v=String(v).trim();if(v.includes(':')){const[m,s]=v.split(':');return (+m||0)*60+(+s||0)}return Math.round((+v||0))};
+function escTotals(){
+  const tot=esc.rows.reduce((a,r)=>a+r.dur,0), tg=esc.target*60;
+  $('#escTotal').textContent=mmss(tot)+' / '+mmss(tg);
+  $('#escBar').style.width=Math.min(100,tot/tg*100)+'%';
+  $('#escBar').style.background=tot>tg*1.05?'var(--red)':tot>=tg*0.9?'var(--green)':'linear-gradient(90deg,var(--accent),var(--amber))';
+  const diff=tg-tot;
+  let t,c;
+  if(Math.abs(diff)<=Math.max(15,tg*0.05)){t=T('✅ Cadra co tempo obxectivo','✅ Cuadra con el tiempo objetivo');c='#173b25'}
+  else if(diff>0){t=T('Faltan ','Faltan ')+mmss(diff)+T(' para chegar ao obxectivo',' para llegar al objetivo');c='var(--panel2)'}
+  else{t=T('Sobran ','Sobran ')+mmss(-diff)+T(': recorta algún bloque',': recorta algún bloque');c='#3b1717'}
+  $('#escFb').textContent=t;$('#escFb').style.background=c;
+  let acc=0; $$('.erow .st').forEach((e,i)=>{e.textContent=T('empeza en ','empieza en ')+mmss(acc);acc+=esc.rows[i].dur});
+  renderTL();
+}
+function renderEsc(){
+  $('#escTarget').value=esc.target;
+  $('#escRows').innerHTML=esc.rows.map((r,i)=>{const ty=eTypes[r.t]||eTypes.libre;return `<div class="erow" style="border-left-color:${ty[2]}"><div class="ic">${ty[0]}</div>
+   <div class="f"><input data-i="${i}" data-k="title" value="${r.title.replace(/"/g,'&quot;')}" placeholder="${T(...ty[1])}"><input class="dur" data-i="${i}" data-k="dur" value="${mmss(r.dur)}" inputmode="numeric">
+   <input data-i="${i}" data-k="who" value="${r.who.replace(/"/g,'&quot;')}" placeholder="${T('Quen fala','Quién habla')}"><input data-i="${i}" data-k="tech" value="${r.tech.replace(/"/g,'&quot;')}" placeholder="${T('Mesa','Mesa')}"></div>
+   <div class="acts"><button data-mv="${i}" data-d="-1">↑</button><button data-mv="${i}" data-d="1">↓</button><button data-del="${i}">✕</button></div><div class="st"></div></div>`}).join('')||`<p style="color:var(--mut)">${T('Escaleta baleira: engade bloques ou carga un modelo.','Escaleta vacía: añade bloques o carga un modelo.')}</p>`;
+  $$('.erow input').forEach(e=>{
+    e.oninput=()=>{const r=esc.rows[+e.dataset.i];if(e.dataset.k==='dur')return;r[e.dataset.k]=e.value;saveEsc();if(e.dataset.k==='title')renderTL()};
+    if(e.dataset.k==='dur') e.onchange=()=>{esc.rows[+e.dataset.i].dur=Math.max(0,parseDur(e.value));e.value=mmss(esc.rows[+e.dataset.i].dur);saveEsc();escTotals()};
+  });
+  $$('[data-mv]').forEach(b=>b.onclick=()=>{const i=+b.dataset.mv,j=i+ +b.dataset.d;if(j<0||j>=esc.rows.length)return;[esc.rows[i],esc.rows[j]]=[esc.rows[j],esc.rows[i]];saveEsc();renderEsc()});
+  $$('[data-del]').forEach(b=>b.onclick=()=>{esc.rows.splice(+b.dataset.del,1);saveEsc();renderEsc()});
+  $('#escAdd').innerHTML=Object.entries(eTypes).map(([k,v])=>`<button data-add="${k}">${v[0]} ${T(...v[1])}</button>`).join('');
+  $$('[data-add]').forEach(b=>b.onclick=()=>{const k=b.dataset.add;esc.rows.push({t:k,title:T(...eTypes[k][1]),who:'',dur:k==='rafaga'?10:k==='sint'?20:60,tech:''});saveEsc();renderEsc()});
+  escTotals();
+}
+$('#escTarget').onchange=()=>{esc.target=Math.max(1,+$('#escTarget').value||10);saveEsc();escTotals()};
+$$('[data-tpl]').forEach(b=>b.onclick=()=>{const k=b.dataset.tpl;
+  esc.rows=k==='clr'?[]:tpls[k].map(r=>({t:r[0],title:lang==='es'?(tplEs[r[1]]||r[1]):r[1],who:lang==='es'?(tplEs[r[2]]||r[2]):r[2],dur:r[3],tech:lang==='es'?(tplEs[r[4]]||r[4]):r[4]}));
+  if(k!=='clr') esc.target=k==='mag'?10:8; saveEsc(); renderEsc()});
+$('#escCopy').onclick=async()=>{
+  let acc=0;
+  const txt=T('ESCALETA','ESCALETA')+` (${mmss(esc.rows.reduce((a,r)=>a+r.dur,0))})\n`+esc.rows.map((r,i)=>{const s=`${i+1}. [${mmss(acc)}] ${r.title} · ${mmss(r.dur)}${r.who?' · '+r.who:''}${r.tech?' · '+T('Mesa','Mesa')+': '+r.tech:''}`;acc+=r.dur;return s}).join('\n');
+  try{await navigator.clipboard.writeText(txt);$('#escMsg').textContent=T('Copiada ✓','Copiada ✓');$('#escTxt').style.display='none'}
+  catch(e){$('#escTxt').style.display='block';$('#escTxt').value=txt;$('#escTxt').select();$('#escMsg').textContent=T('Cópiaa de aquí:','Cópiala de aquí:')}
+};
+rerenders.push(renderEsc);
+
+
+/* liña de tempo horizontal */
+function renderTL(sel='#escTL',live=false){
+  const el=$(sel); if(!el) return;
+  const tot=esc.rows.reduce((a,r)=>a+r.dur,0), tg=esc.target*60, S=Math.max(tot,tg,60);
+  let acc=0, h='';
+  esc.rows.forEach((r,i)=>{
+    const ty=eTypes[r.t]||eTypes.libre, w=r.dur/S*100, l=acc/S*100; acc+=r.dur;
+    const lab=w>11?`${ty[0]}<span>${r.title}</span>`:w>4?ty[0]:'';
+    const cls=live?(i===L.i?' cur':i<L.i?' past':''):'';
+    h+=`<div class="sg${cls}" data-i="${i}" title="${r.title.replace(/"/g,'&quot;')} · ${mmss(r.dur)}" style="left:${l}%;width:${w}%;background:${ty[2]}">${lab}</div>`;
+  });
+  h+=`<div class="tg" style="left:${Math.min(99.6,tg/S*100)}%"></div>`;
+  if(live){ const r=esc.rows[L.i]; let pos=esc.rows.slice(0,L.i).reduce((a,x)=>a+x.dur,0)+(r?Math.min(L.el,r.dur):0); h+=`<div class="cr" style="left:${Math.min(100,pos/S*100)}%"></div>`; }
+  el.innerHTML=h;
+  if(!live){
+    $$(sel+' .sg').forEach(g=>g.onclick=()=>{const row=$$('.erow')[+g.dataset.i];if(row){row.scrollIntoView({behavior:'smooth',block:'center'});row.classList.remove('flash');void row.offsetWidth;row.classList.add('flash')}});
+    const step=S<=420?60:S<=900?120:S<=1800?300:600;
+    let t='';for(let x=0;x<=S;x+=step)t+=`<span style="left:${x/S*100}%">${Math.round(x/60)}'</span>`;
+    $('#escTLs').innerHTML=t;
+    const used=[...new Set(esc.rows.map(r=>r.t))];
+    $('#escLeg').innerHTML=used.map(k=>{const ty=eTypes[k]||eTypes.libre;return `<span><i style="background:${ty[2]}"></i>${T(...ty[1])}</span>`}).join('')+`<span><i style="background:none;border-left:2px dashed #fff;border-radius:0"></i>${T('Obxectivo','Objetivo')}</span>`;
+  }
+}
+/* modo emisión */
+let L={i:0,el:0,tot:0,run:false,iv:null};
+function liveRender(){
+  const r=esc.rows[L.i], n=esc.rows[L.i+1];
+  if(!r){$('#lNow').textContent=T('Fin 🎉','Fin 🎉');$('#lTime').textContent='';$('#lTech').textContent='';$('#lNext').textContent='—';}
+  else{
+    const ty=eTypes[r.t]||eTypes.libre, left=r.dur-L.el;
+    $('#lNow').textContent=ty[0]+' '+r.title+(r.who?' · '+r.who:'');
+    $('#lTime').textContent=(left<0?'+':'')+mmss(Math.abs(left));
+    $('#lTime').className='ltime'+(left<0?' over':left<=10?' warn':'');
+    $('#lTech').textContent=r.tech?'🎛️ '+r.tech:'';
+    $('.lnow').style.borderColor=ty[2];
+    $('#lNext').textContent=n?((eTypes[n.t]||eTypes.libre)[0]+' '+n.title+' · '+mmss(n.dur)):T('Fin do programa','Fin del programa');
+  }
+  const tg=esc.target*60;
+  $('#lClock').textContent='⏱ '+mmss(L.tot);
+  $('#lLeft').textContent=T('Queda ','Queda ')+(tg-L.tot<0?'-':'')+mmss(Math.abs(tg-L.tot));
+  $('#lPlay').textContent=L.run?T('⏸ Pausa','⏸ Pausa'):T('▶ Comezar','▶ Empezar');
+  $('#lNextB').textContent=T('Seguinte ▶','Siguiente ▶');
+  renderTL('#lTL',true);
+}
+$('#escLive').onclick=()=>{if(!esc.rows.length)return;L={i:0,el:0,tot:0,run:false,iv:null};$('#live').classList.add('on');liveRender()};
+$('#lClose').onclick=()=>{clearInterval(L.iv);L.run=false;$('#live').classList.remove('on')};
+$('#lPlay').onclick=()=>{L.run=!L.run;clearInterval(L.iv);if(L.run)L.iv=setInterval(()=>{L.el++;L.tot++;const r=esc.rows[L.i];if(r&&r.dur-L.el===10)beep(880,.1);if(r&&r.dur-L.el===0)beep(440,.3);liveRender()},1000);liveRender()};
+$('#lNextB').onclick=()=>{if(L.i<esc.rows.length){L.i++;L.el=0;beep(660,.08);liveRender()}};
+$('#lPrev').onclick=()=>{if(L.i>0){L.i--;L.el=0;liveRender()}};
+rerenders.push(()=>{if($('#live').classList.contains('on'))liveRender()});
+
+setLang(lang);
+</script>
+</body>
+</html>
